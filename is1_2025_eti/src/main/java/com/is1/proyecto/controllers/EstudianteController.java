@@ -247,22 +247,22 @@ public class EstudianteController {
         });
 
         get("/inscripcion", (req,res) -> {
-                        // 1. Verificar que haya iniciado sesión
-                        Boolean loggedIn = req.session().attribute("loggedIn");
-                        if (loggedIn == null || !loggedIn) {
-                            res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
-                            return null;
-                        }
+            // 1. Verificar que haya iniciado sesión
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
+                    return null;
+            }
             
-                        // 2. Verificar que el rol sea ESPECÍFICAMENTE "estudiante"
-                        String rolUsuario = req.session().attribute("rol");
-                        // Asumimos que guardaste el rol en minúsculas en la BD
-                        if (rolUsuario == null || !rolUsuario.equals("estudiante")) {
-                            System.out.println("DEBUG: Intento de acceso denegado a /inscripcion por rol: " + rolUsuario);
-                            // Lo mandamos al dashboard con un mensaje de error
-                            res.redirect("/dashboard?error=Acceso denegado. Esta sección es exclusiva para estudiantes.");
-                            return null;
-                      }
+            // 2. Verificar que el rol sea ESPECÍFICAMENTE "estudiante"
+            String rolUsuario = req.session().attribute("rol");
+            // Asumimos que guardaste el rol en minúsculas en la BD
+            if (rolUsuario == null || !rolUsuario.equals("estudiante")) {
+                System.out.println("DEBUG: Intento de acceso denegado a /inscripcion por rol: " + rolUsuario);
+                // Lo mandamos al dashboard con un mensaje de error
+                res.redirect("/dashboard?error=Acceso denegado. Esta sección es exclusiva para estudiantes.");
+                return null;
+            }
 
             Map<String, Object> model = new HashMap<>();
             Integer usuarioId = req.session().attribute("usuario_id");

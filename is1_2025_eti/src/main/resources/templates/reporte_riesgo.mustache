@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alerta Temprana Académica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+<div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex justify-between items-center border-l-4 border-red-600">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Detección de Riesgo Académico</h1>
+            <p class="text-gray-600 mt-1">Estudiantes identificados para intervención temprana.</p>
+        </div>
+        <div class="text-center bg-red-50 px-6 py-3 rounded-md border border-red-200">
+            <span class="block text-sm font-semibold text-red-600 uppercase tracking-wide">Casos</span>
+            <span class="text-3xl font-bold text-red-700">{{totalRiesgo}}</span>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-800 text-white text-sm uppercase tracking-wide">
+                    <th class="p-4 font-medium">Estudiante</th>
+                    <th class="p-4 font-medium">DNI</th>
+                    <th class="p-4 font-medium text-center">Ingreso</th>
+                    <th class="p-4 font-medium">Indicador de Riesgo</th>
+                    <th class="p-4 font-medium text-center">Acción</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 text-sm">
+                {{#alumnosEnRiesgo}}
+                <tr class="border-b hover:bg-gray-50 transition-colors">
+                    <td class="p-4">
+                        <div class="font-bold text-gray-900 text-base">{{apellido}}, {{nombre}}</div>
+                        <div class="text-xs text-gray-500">Tel: {{telefono}}</div>
+                    </td>
+                    <td class="p-4 font-mono">{{dni}}</td>
+                    <td class="p-4 text-center">{{anioIngreso}}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full border {{colorBadge}}">
+                            {{tipoRiesgo}}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <a href="https://wa.me/549{{telefono}}" target="_blank"
+                           class="inline-block bg-green-600 text-white text-xs px-4 py-2 rounded hover:bg-green-700 transition font-medium shadow">
+                            WhatsApp
+                        </a>
+                    </td>
+                </tr>
+                {{/alumnosEnRiesgo}}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-6 flex justify-center">
+        <a href="/dashboard" class="bg-gray-200 text-gray-800 py-2 px-6 rounded-md hover:bg-gray-300 font-medium transition shadow-sm border border-gray-300">
+            ← Volver al Panel
+        </a>
+    </div>
+</div>
+</body>
+</html>
