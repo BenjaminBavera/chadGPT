@@ -1,0 +1,5 @@
+mvn clean process-classes
+
+mvn activejdbc-instrumentation:instrument
+
+mvn exec:java -Dexec.mainClass="com.is1.proyecto.App"
