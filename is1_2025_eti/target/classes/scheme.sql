@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS profesor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     usuario_id INTEGER NOT NULL UNIQUE, -- Relación 1 a 1 con la superclase
     correo TEXT NOT NULL UNIQUE,
-    cargo VARCHAR(60) NOT NULL CHECK(cargo IN('Responsable de Cátedra','Jefe Trabajos Prácticos','Ayudante')),
     CONSTRAINT fk_profesor_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 
@@ -83,7 +82,7 @@ CREATE TABLE IF NOT EXISTS estudiante_materia(
 CREATE TABLE IF NOT EXISTS profesor_materia(
     profesor_id INTEGER NOT NULL,
     materia_id INTEGER NOT NULL,
-    cargo TEXT NOT NULL,
+    cargo VARCHAR(60) NOT NULL CHECK(cargo IN('Responsable de Cátedra','Jefe Trabajos Prácticos','Ayudante')),
     PRIMARY KEY (profesor_id, materia_id),
     FOREIGN KEY (profesor_id) REFERENCES profesor(id) ON DELETE CASCADE,
     FOREIGN KEY (materia_id) REFERENCES materia(id) ON DELETE CASCADE

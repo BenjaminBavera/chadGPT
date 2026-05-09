@@ -70,13 +70,11 @@ public class ProfesorController {
             String correo = req.queryParams("correo");
             String dni = req.queryParams("dni");
             String telefono = req.queryParams("telefono"); // Agregamos teléfono que está en la DB
-            String cargo = req.queryParams("cargo");
 
             // Validaciones básicas (Asegurate de que no falten los nuevos campos)
             if (username == null || username.isEmpty() || password == null || password.isEmpty() ||
                     nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() ||
-                    correo == null || correo.isEmpty() || dni == null || dni.isEmpty() ||
-                    cargo == null || cargo.isEmpty()) {
+                    correo == null || correo.isEmpty() || dni == null || dni.isEmpty() ){
 
                 res.status(400);
                 res.redirect("/registrarProfesor?error=Todos los campos obligatorios son requeridos.");
@@ -119,7 +117,6 @@ public class ProfesorController {
                 Profesor pro = new Profesor();
                 pro.set("usuario_id", user.getId()); // ¡CLAVE FORÁNEA!
                 pro.set("correo", correo);
-                pro.set("cargo", cargo);
                 pro.saveIt();
 
                 // CONFIRMAMOS TRANSACCIÓN

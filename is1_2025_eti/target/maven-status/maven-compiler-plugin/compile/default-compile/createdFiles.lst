@@ -1,11 +1,12 @@
 com/is1/proyecto/controllers/MateriaController.class
-com/is1/proyecto/App.class
 com/is1/proyecto/controllers/EstudianteController.class
+com/is1/proyecto/App.class
 com/is1/proyecto/models/Plan.class
 com/is1/proyecto/models/Materia.class
 com/is1/proyecto/models/User.class
 com/is1/proyecto/controllers/ProfesorController.class
 com/is1/proyecto/config/DBConfigSingleton.class
+com/is1/proyecto/controllers/AdminController.class
 com/is1/proyecto/controllers/CarreraController.class
 com/is1/proyecto/models/Usuario.class
 com/is1/proyecto/controllers/PlanController.class

@@ -568,7 +568,7 @@
     </routine>
     <schema id="214" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2026-04-23.17:36:42</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2026-05-09.19:12:04</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="215" parent="14">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1812,103 +1812,110 @@
     <table id="630" parent="214" name="estudiante_materia"/>
     <table id="631" parent="214" name="materia"/>
     <table id="632" parent="214" name="plan"/>
-    <table id="633" parent="214" name="profesor"/>
-    <table id="634" parent="214" name="profesor_materia"/>
-    <table id="635" parent="214" name="sqlite_master">
+    <table id="633" parent="214" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="636" parent="214" name="sqlite_sequence">
+    <table id="634" parent="214" name="sqlite_sequence">
       <System>1</System>
     </table>
-    <table id="637" parent="214" name="usuario"/>
-    <column id="638" parent="627" name="id">
+    <table id="635" parent="214" name="usuario"/>
+    <column id="636" parent="627" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="639" parent="627" name="nombre">
+    <column id="637" parent="627" name="nombre">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <index id="640" parent="627" name="sqlite_autoindex_carrera_1">
+    <index id="638" parent="627" name="sqlite_autoindex_carrera_1">
       <ColNames>nombre</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="641" parent="627">
+    <key id="639" parent="627">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="642" parent="627">
+    <key id="640" parent="627">
       <ColNames>nombre</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_carrera_1</UnderlyingIndexName>
     </key>
-    <check id="643" parent="628">
+    <check id="641" parent="628">
       <Predicate>tipo IN (&apos;regular&apos;, &apos;aprobada&apos;)</Predicate>
     </check>
-    <column id="644" parent="628" name="id">
+    <column id="642" parent="628" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="645" parent="628" name="materia_codigo">
+    <column id="643" parent="628" name="materia_codigo">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="646" parent="628" name="correlativa_codigo">
+    <column id="644" parent="628" name="correlativa_codigo">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="647" parent="628" name="tipo">
+    <column id="645" parent="628" name="tipo">
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="648" parent="628">
+    <foreign-key id="646" parent="628">
       <ColNames>materia_codigo</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>materia</RefTableName>
     </foreign-key>
-    <foreign-key id="649" parent="628">
+    <foreign-key id="647" parent="628">
       <ColNames>correlativa_codigo</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>materia</RefTableName>
     </foreign-key>
-    <key id="650" parent="628">
+    <key id="648" parent="628">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <check id="651" parent="629">
+    <check id="649" parent="629">
       <Predicate>nivel IN (&apos;principiante&apos;, &apos;avanzado&apos;)</Predicate>
     </check>
-    <column id="652" parent="629" name="id">
+    <column id="650" parent="629" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="653" parent="629" name="usuario_id">
+    <column id="651" parent="629" name="usuario_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="654" parent="629" name="anioIngreso">
+    <column id="652" parent="629" name="anioIngreso">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="655" parent="629" name="nivel">
+    <column id="653" parent="629" name="nivel">
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="656" parent="629" name="fk_estudiante_usuario">
+    <column id="654" parent="629" name="carrera_id">
+      <Position>5</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <foreign-key id="655" parent="629" name="fk_estudiante_usuario">
       <ColNames>usuario_id</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>usuario</RefTableName>
+    </foreign-key>
+    <foreign-key id="656" parent="629">
+      <ColNames>carrera_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>carrera</RefTableName>
     </foreign-key>
     <index id="657" parent="629" name="sqlite_autoindex_estudiante_1">
       <ColNames>usuario_id</ColNames>
@@ -1938,262 +1945,184 @@
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="663" parent="630">
+    <column id="663" parent="630" name="nota">
+      <Position>4</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <foreign-key id="664" parent="630">
       <ColNames>estudiante_id</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>estudiante</RefTableName>
     </foreign-key>
-    <foreign-key id="664" parent="630">
+    <foreign-key id="665" parent="630">
       <ColNames>materia_codigo</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>materia</RefTableName>
     </foreign-key>
-    <index id="665" parent="630" name="sqlite_autoindex_estudiante_materia_1">
+    <index id="666" parent="630" name="sqlite_autoindex_estudiante_materia_1">
       <ColNames>estudiante_id
 materia_codigo</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="666" parent="630">
+    <key id="667" parent="630">
       <ColNames>estudiante_id
 materia_codigo</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_estudiante_materia_1</UnderlyingIndexName>
     </key>
-    <column id="667" parent="631" name="id">
+    <column id="668" parent="631" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="668" parent="631" name="nombre">
+    <column id="669" parent="631" name="nombre">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="669" parent="631" name="anio_cursado">
+    <column id="670" parent="631" name="anio_cursado">
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="670" parent="631" name="cuatrimestre">
+    <column id="671" parent="631" name="cuatrimestre">
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="671" parent="631" name="plan_id">
+    <column id="672" parent="631" name="plan_id">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="672" parent="631" name="fk_materia_plan">
+    <foreign-key id="673" parent="631" name="fk_materia_plan">
       <ColNames>plan_id</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>plan</RefTableName>
     </foreign-key>
-    <key id="673" parent="631">
+    <key id="674" parent="631">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="674" parent="632" name="id">
+    <column id="675" parent="632" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="675" parent="632" name="anio">
+    <column id="676" parent="632" name="anio">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="676" parent="632" name="es_vigente">
+    <column id="677" parent="632" name="es_vigente">
       <DefaultExpression>1</DefaultExpression>
       <Position>3</Position>
       <StoredType>BOOLEAN|0s</StoredType>
     </column>
-    <column id="677" parent="632" name="carrera_id">
+    <column id="678" parent="632" name="carrera_id">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="678" parent="632" name="fk_plan_carrera">
+    <foreign-key id="679" parent="632" name="fk_plan_carrera">
       <ColNames>carrera_id</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>id</RefColNames>
       <RefTableName>carrera</RefTableName>
     </foreign-key>
-    <key id="679" parent="632">
+    <key id="680" parent="632">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="680" parent="633" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="681" parent="633" name="usuario_id">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="682" parent="633" name="correo">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <foreign-key id="683" parent="633" name="fk_profesor_usuario">
-      <ColNames>usuario_id</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>id</RefColNames>
-      <RefTableName>usuario</RefTableName>
-    </foreign-key>
-    <index id="684" parent="633" name="sqlite_autoindex_profesor_1">
-      <ColNames>usuario_id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <index id="685" parent="633" name="sqlite_autoindex_profesor_2">
-      <ColNames>correo</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="686" parent="633">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <key id="687" parent="633">
-      <ColNames>usuario_id</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_profesor_1</UnderlyingIndexName>
-    </key>
-    <key id="688" parent="633">
-      <ColNames>correo</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_profesor_2</UnderlyingIndexName>
-    </key>
-    <column id="689" parent="634" name="profesor_id">
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="690" parent="634" name="materia_id">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="691" parent="634" name="cargo">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <foreign-key id="692" parent="634">
-      <ColNames>profesor_id</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>id</RefColNames>
-      <RefTableName>profesor</RefTableName>
-    </foreign-key>
-    <foreign-key id="693" parent="634">
-      <ColNames>materia_id</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>id</RefColNames>
-      <RefTableName>materia</RefTableName>
-    </foreign-key>
-    <index id="694" parent="634" name="sqlite_autoindex_profesor_materia_1">
-      <ColNames>profesor_id
-materia_id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="695" parent="634">
-      <ColNames>profesor_id
-materia_id</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_profesor_materia_1</UnderlyingIndexName>
-    </key>
-    <column id="696" parent="635" name="type">
+    <column id="681" parent="633" name="type">
       <Position>1</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="697" parent="635" name="name">
+    <column id="682" parent="633" name="name">
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="698" parent="635" name="tbl_name">
+    <column id="683" parent="633" name="tbl_name">
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="699" parent="635" name="rootpage">
+    <column id="684" parent="633" name="rootpage">
       <Position>4</Position>
       <StoredType>INT|0s</StoredType>
     </column>
-    <column id="700" parent="635" name="sql">
+    <column id="685" parent="633" name="sql">
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="701" parent="636" name="name">
+    <column id="686" parent="634" name="name">
       <Position>1</Position>
     </column>
-    <column id="702" parent="636" name="seq">
+    <column id="687" parent="634" name="seq">
       <Position>2</Position>
     </column>
-    <check id="703" parent="637">
+    <check id="688" parent="635">
       <Predicate>rol IN (&apos;administrador&apos;, &apos;profesor&apos;, &apos;estudiante&apos;)</Predicate>
     </check>
-    <column id="704" parent="637" name="id">
+    <column id="689" parent="635" name="id">
       <AutoIncrement>1</AutoIncrement>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="705" parent="637" name="username">
+    <column id="690" parent="635" name="username">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="706" parent="637" name="password">
+    <column id="691" parent="635" name="password">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="707" parent="637" name="dni">
+    <column id="692" parent="635" name="dni">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="708" parent="637" name="nombre">
+    <column id="693" parent="635" name="nombre">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="709" parent="637" name="apellido">
+    <column id="694" parent="635" name="apellido">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="710" parent="637" name="telefono">
+    <column id="695" parent="635" name="telefono">
       <Position>7</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="711" parent="637" name="rol">
+    <column id="696" parent="635" name="rol">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <index id="712" parent="637" name="sqlite_autoindex_usuario_1">
+    <index id="697" parent="635" name="sqlite_autoindex_usuario_1">
       <ColNames>username</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <index id="713" parent="637" name="sqlite_autoindex_usuario_2">
+    <index id="698" parent="635" name="sqlite_autoindex_usuario_2">
       <ColNames>dni</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="714" parent="637">
+    <key id="699" parent="635">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="715" parent="637">
+    <key id="700" parent="635">
       <ColNames>username</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_usuario_1</UnderlyingIndexName>
     </key>
-    <key id="716" parent="637">
+    <key id="701" parent="635">
       <ColNames>dni</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_usuario_2</UnderlyingIndexName>
     </key>
