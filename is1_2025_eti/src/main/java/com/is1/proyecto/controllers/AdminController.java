@@ -340,5 +340,59 @@ public class AdminController {
             return new ModelAndView(model, "reporte_riesgo.mustache");
         }, new MustacheTemplateEngine());
 
+        get("/alumnosExcelencia", (req, res) -> {
+            // 1. Verificación de Seguridad
+            String rol = req.session().attribute("rol");
+            if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=Acceso denegado.");
+                return null;
+            }
+
+            // 2. Consulta SQL para buscar a los alumnos destacados
+            String sqlExcelencia =
+                    "SELECT u.nombre, u.apellido, u.dni, u.telefono, e.anioIngreso, " +
+                            "COUNT(em.materia_codigo) as materias_aprobadas, " +
+                            "ROUND(AVG(em.nota), 2) as promedio " +
+                            "FROM estudiante e " +
+                            "JOIN usuario u ON e.usuario_id = u.id " +
+                            "JOIN estudiante_materia em ON e.id = em.estudiante_id " +
+                            "WHERE em.estado = 'aprobada' " +
+                            "GROUP BY e.id, u.nombre, u.apellido, u.dni, u.telefono, e.anioIngreso " +
+                            "HAVING promedio >= 8 " + // Filtro: Solo promedios mayores o iguales a 8
+                            "ORDER BY promedio DESC, materias_aprobadas DESC";
+
+            List<Map> alumnosCrudos = Base.findAll(sqlExcelencia);
+            List<Map<String, Object>> alumnosDestacados = new ArrayList<>();
+
+            for (Map registro : alumnosCrudos) {
+                // Obtenemos los datos numéricos de forma segura
+                long materiasAprobadas = ((Number) registro.get("materias_aprobadas")).longValue();
+                double promedio = ((Number) registro.get("promedio")).doubleValue();
+
+                String tipoExcelencia;
+                String colorBadge;
+
+                // Clasificación visual (Igual que hiciste con el riesgo, pero en positivo)
+                if (promedio >= 9.0) {
+                    tipoExcelencia = "Sobresaliente (Promedio: " + promedio + ")";
+                    colorBadge = "bg-green-100 text-green-800 border-green-300"; // Verde para los +9
+                } else {
+                    tipoExcelencia = "Destacado (Promedio: " + promedio + ")";
+                    colorBadge = "bg-teal-100 text-teal-800 border-teal-300"; // Verde azulado para los 8 a 8.99
+                }
+
+                registro.put("tipoExcelencia", tipoExcelencia);
+                registro.put("colorBadge", colorBadge);
+                alumnosDestacados.add(registro);
+            }
+
+            // 3. Pasamos los datos a Mustache
+            Map<String, Object> model = new HashMap<>();
+            model.put("alumnosDestacados", alumnosDestacados);
+            model.put("totalDestacados", alumnosDestacados.size());
+
+            return new ModelAndView(model, "alumnos_excelencia.mustache");
+        }, new MustacheTemplateEngine());
+
     }
 }

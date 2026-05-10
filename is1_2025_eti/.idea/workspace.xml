@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10ed7b19-792e-4695-acb8-56f847f45a22" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce3d5efa-eac0-4dea-aefd-ec1f444e08a8.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce3d5efa-eac0-4dea-aefd-ec1f444e08a8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/alumnos_excelencia.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/dev.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/dev.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/ProfesorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/ProfesorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/models/Profesor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/models/Profesor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scheme.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scheme.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/registrarProfesor.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/registrarProfesor.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/scheme.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scheme.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/registrarProfesor.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/registrarProfesor.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +60,7 @@
     ]
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Unnamed">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="proye-is" />
