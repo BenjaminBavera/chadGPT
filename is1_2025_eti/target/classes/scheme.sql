@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS materia (
     anio_cursado INTEGER, -- ej: 1 para "Primer Año"
     cuatrimestre INTEGER, -- ej: 1 o 2
     plan_id INTEGER NOT NULL,
+    cupo INTEGER DEFAULT 30,
     CONSTRAINT fk_materia_plan FOREIGN KEY (plan_id) REFERENCES plan(id) ON DELETE CASCADE
 );
 

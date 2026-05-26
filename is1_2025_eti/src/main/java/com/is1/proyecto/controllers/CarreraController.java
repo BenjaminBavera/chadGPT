@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.javalite.activejdbc.Base;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.is1.proyecto.models.Carrera;
 import com.is1.proyecto.models.Materia;
@@ -95,6 +97,92 @@ public class CarreraController {
                 res.redirect("/crearCarrera?error=" + errorEncoded);
             }
             return "";
+        });
+
+        get("/inscriptosPorMateria", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            String rol = req.session().attribute("rol");
+            if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=Permiso denegado.");
+                return null;
+            }
+
+            List<Map> materias = Base.findAll(
+                "SELECT m.id, m.nombre, m.cupo, COUNT(em.estudiante_id) AS inscriptos, " +
+                "(m.cupo - COUNT(em.estudiante_id)) AS disponibles " +
+                "FROM materia m " +
+                "LEFT JOIN estudiante_materia em ON m.id = em.materia_codigo " +
+                "GROUP BY m.id, m.nombre, m.cupo"
+            );
+
+            model.put("materias", materias);
+
+            String error = req.queryParams("error");
+            if (error != null) model.put("error", error);
+            String message = req.queryParams("message");
+            if (message != null) model.put("message", message);
+
+            return new ModelAndView(model, "inscriptos_por_materia.mustache");
+        }, new MustacheTemplateEngine());
+
+        get("/inscriptosPorMateria/:materiaId", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String rol = req.session().attribute("rol");
+            if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=Permiso denegado.");
+                return null;
+            }
+            int materiaId = Integer.parseInt(req.params("materiaId"));
+
+            Materia materia = Materia.findById(materiaId);
+
+            Map<String, Object> materiaData = new HashMap<>();
+            materiaData.put("id", materia.getId());
+            materiaData.put("nombre", materia.getString("nombre"));
+            materiaData.put("cupo", materia.get("cupo"));
+            model.put("materia", materiaData);
+
+            List<Map> estudiantes = Base.findAll(
+                "SELECT u.nombre, u.apellido, u.dni, em.estado, em.nota " +
+                "FROM estudiante_materia em " +
+                "JOIN estudiante e ON em.estudiante_id = e.id " +
+                "JOIN usuario u ON e.usuario_id = u.id " +
+                "WHERE em.materia_codigo = ?",
+                materiaId
+            );
+            model.put("estudiantes", estudiantes);
+
+            String error = req.queryParams("error");
+            if (error != null) model.put("error", error);
+            String message = req.queryParams("message");
+            if (message != null) model.put("message", message);
+
+            return new ModelAndView(model, "detalle_materia.mustache");
+        }, new MustacheTemplateEngine());
+
+        post("/actualizarCupo", (req, res) -> {
+            String rol = req.session().attribute("rol");
+            if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=Permiso denegado.");
+                return null;
+            }
+
+            String materiaId = req.queryParams("materia_id");
+            String cupo = req.queryParams("cupo");
+
+            try {
+                Base.exec(
+                    "UPDATE materia SET cupo = ? WHERE id = ?",
+                    Integer.parseInt(cupo), Integer.parseInt(materiaId)
+                );
+                String msg = URLEncoder.encode("Cupo actualizado correctamente.", StandardCharsets.UTF_8.toString());
+                res.redirect("/inscriptosPorMateria/" + materiaId + "?message=" + msg);
+            } catch (Exception e) {
+                String err = URLEncoder.encode("Error al actualizar el cupo.", StandardCharsets.UTF_8.toString());
+                res.redirect("/inscriptosPorMateria/" + materiaId + "?error=" + err);
+            }
+            return null;
         });
 
         //NO TOQUEN ESTO!!!!!!!!! ME FALTA HACER EL JSON PARA CARRERA
