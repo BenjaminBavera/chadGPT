@@ -191,7 +191,14 @@ public class EstudianteController {
             Usuario usuario = Usuario.findById(usuarioId);
 
             List<Map> materias = Base.findAll(
-                    "SELECT m.nombre, em.estado, em.materia_codigo " +
+                    "SELECT m.id AS materia_codigo, m.nombre, em.estado, " +
+                            "IFNULL(em.nota, '-') AS notaDisplay, " +
+                            "CASE em.estado " +
+                            "WHEN 'aprobada' THEN 'bg-green-100 text-green-800 border-green-300' " +
+                            "WHEN 'regular' THEN 'bg-blue-100 text-blue-800 border-blue-300' " +
+                            "WHEN 'inscripto' THEN 'bg-yellow-100 text-yellow-800 border-yellow-300' " +
+                            "ELSE 'bg-red-100 text-red-800 border-red-300' " +
+                            "END AS colorBadge " +
                             "FROM estudiante_materia em " +
                             "JOIN materia m ON em.materia_codigo = m.id " +
                             "WHERE em.estudiante_id = ?",

@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10ed7b19-792e-4695-acb8-56f847f45a22" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/alumnos_excelencia.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/dev.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/dev.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/EstudianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/EstudianteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/estado_academico.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/estado_academico.mustache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +73,14 @@
       <script-mode>FILE</script-mode>
       <method v="2" />
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.24374.151" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.24374.151" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

@@ -49,6 +49,7 @@
                     <th class="p-3 border-b">Código</th>
                     <th class="p-3 border-b">Materia</th>
                     <th class="p-3 border-b">Estado</th>
+                    <th class="p-3 border-b">Nota</th>
                 </tr>
             </thead>
 
@@ -58,11 +59,11 @@
                     <td class="p-3 font-mono">{{materia_codigo}}</td>
                     <td class="p-3">{{nombre}}</td>
                     <td class="p-3">
-                        <span class="px-2 py-1 rounded text-white
-                            {{#estado}}bg-green-500{{/estado}}">
+                        <span class="px-2 py-1 rounded text-xs font-semibold uppercase tracking-wide border {{colorBadge}}">
                             {{estado}}
                         </span>
                     </td>
+                    <td class="p-3 text-center font-bold text-gray-700">{{notaDisplay}}</td>
                 </tr>
                 {{/materias}}
 
