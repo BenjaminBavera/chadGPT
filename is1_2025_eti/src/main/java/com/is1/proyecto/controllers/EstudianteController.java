@@ -18,9 +18,12 @@ import com.is1.proyecto.models.Materia;
 import com.is1.proyecto.models.Plan;
 import com.is1.proyecto.models.Usuario;
 
+import spark.Filter;
 import spark.ModelAndView;
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.halt;
+import static spark.Spark.before;
 import spark.template.mustache.MustacheTemplateEngine;
 
 
@@ -30,21 +33,67 @@ public class EstudianteController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void registrarRutas(){
+
+
+        //Definición de los filtros de seguridad.
+
+        // A. Filtro Exclusivo para Administradores
+        Filter filtroAdmin = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            } else if (!"administrador".equals(rol)) {
+                res.redirect("/login?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt();
+            }
+        };
+
+        // B. Filtro Exclusivo para Estudiantes
+        Filter filtroEstudiante = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            } else if (!"estudiante".equals(rol)) {
+                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Sección exclusiva para estudiantes.", StandardCharsets.UTF_8));
+                halt();
+            }
+        };
+
+        // C. Filtro de Autenticación General (Para cambiar contraseña)
+        Filter filtroLogueado = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            }
+        };
+
+        //Aplicación de los filtros a las rutas.
+        // Rutas de Administración
+        before("/registrarEstudiante", filtroAdmin);
+        before("/registrarEstudiante/new", filtroAdmin);
+        
+        // Rutas de Estudiante
+        before("/dashboardEstudiante", filtroEstudiante);
+        before("/estadoAcademico", filtroEstudiante);
+        before("/perfil", filtroEstudiante);
+        before("/inscripcion", filtroEstudiante);
+        before("/inscribir", filtroEstudiante);
+        before("/inscribirCarrera", filtroEstudiante);
+
+        // Rutas Generales
+        before("/cambiarPassword", filtroLogueado);
+
+
         get("/registrarEstudiante", (req, res) -> {
             Map<String, Object> model = new HashMap<>(); // Crea un mapa para pasar datos a la plantilla.
             String currentUsername = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-            // Validar sesión
-            if (currentUsername == null || loggedIn == null || !loggedIn) {
-                res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
-                return null;
-            }
-            // Validar rol (Solo Admins)
-            if (!"administrador".equals(rol)) {
-                res.redirect("/login?error=No tienes permisos para gestionar usuarios.");
-                return null;
-            }
             // Pasamos el nombre de usuario para que el Mustache lo salude
             model.put("username", currentUsername);
             
@@ -53,7 +102,6 @@ public class EstudianteController {
             if (successMessage != null && !successMessage.isEmpty()) {
                 model.put("successMessage", successMessage);
             }
-            
             String errorMessage = req.queryParams("error");
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 model.put("errorMessage", errorMessage);
@@ -254,23 +302,6 @@ public class EstudianteController {
         });
 
         get("/inscripcion", (req,res) -> {
-            // 1. Verificar que haya iniciado sesión
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            if (loggedIn == null || !loggedIn) {
-                res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
-                    return null;
-            }
-            
-            // 2. Verificar que el rol sea ESPECÍFICAMENTE "estudiante"
-            String rolUsuario = req.session().attribute("rol");
-            // Asumimos que guardaste el rol en minúsculas en la BD
-            if (rolUsuario == null || !rolUsuario.equals("estudiante")) {
-                System.out.println("DEBUG: Intento de acceso denegado a /inscripcion por rol: " + rolUsuario);
-                // Lo mandamos al dashboard con un mensaje de error
-                res.redirect("/dashboard?error=Acceso denegado. Esta sección es exclusiva para estudiantes.");
-                return null;
-            }
-
             Map<String, Object> model = new HashMap<>();
             Integer usuarioId = req.session().attribute("usuario_id");
             Estudiante estudiante = Estudiante.findFirst("usuario_id = ?", usuarioId);
@@ -437,6 +468,5 @@ public class EstudianteController {
             }
             return null;
         });
-
     }
 }

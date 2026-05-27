@@ -2,6 +2,8 @@ package com.is1.proyecto.controllers;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.halt;
+import static spark.Spark.before;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.is1.proyecto.models.User;
 import com.is1.proyecto.models.Usuario;
 
+import spark.Filter;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
@@ -27,6 +30,30 @@ public class AdminController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void registrarRutas(){
+
+        //Definición del filtro de seguridad.
+        Filter filtroAdmin = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt(); // Detiene la ejecución aquí mismo
+            } else if (!"administrador".equals(rol)) {
+                res.redirect("/?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt(); // Detiene la ejecución aquí mismo
+            }
+        };
+
+        //Aplicación del filtro a las rutas protegidas.
+        before("/dashboard", filtroAdmin);
+        before("/crearAdmin", filtroAdmin);
+        before("/admin/new", filtroAdmin);
+        before("/dashboardCarrera", filtroAdmin);
+        before("/gestionUsuario", filtroAdmin);
+        before("/reporteRiesgo", filtroAdmin);
+        before("/alumnosExcelencia", filtroAdmin);
+
         // --- Rutas GET para renderizar formularios y páginas HTML ---
 
         // GET: Muestra el formulario de creación de cuenta.
@@ -51,23 +78,9 @@ public class AdminController {
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
 
         // GET: Ruta para mostrar el dashboard (panel de control) del usuario.
-        // Requiere que el usuario esté autenticado.
         get("/dashboard", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             String username = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-
-            // Validación de sesión
-            if (loggedIn == null || !loggedIn || username == null) {
-                res.redirect("/?error=Inicia sesión primero");
-                return null;
-            }
-            // Validación de Rol (solo permitimos al admin aquí)
-            if (!"administrador".equals(rol)) {
-                res.redirect("/?error=No tienes permisos de administrador");
-                return null;
-            }
             model.put("username", username);
             // Asegúrate de que el nombre del archivo coincida con el que tenías para el admin
             return new ModelAndView(model, "dashboard.mustache");
@@ -113,22 +126,8 @@ public class AdminController {
         // GET: Muestra el formulario para registrar un nuevo Administrador
         get("/crearAdmin", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            // 1. Validar la sesión y el rol actual
-            String currentUsername = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-            if (currentUsername == null || loggedIn == null || !loggedIn) {
-                res.redirect("/?error=Debes iniciar sesión para acceder a esta página.");
-                return null;
-            }
-            // ¡SEGURIDAD! Solo un administrador puede crear otro administrador
-            if (!"administrador".equals(rol)) {
-                System.out.println("DEBUG: Intento de acceso denegado a /crearAdmin por rol: " + rol);
-                // Lo mandamos a su panel correspondiente con un reto
-                res.redirect("/dashboard?error=No tienes permisos para registrar administradores.");
-                return null;
-            }
-            // 2. Capturar mensajes de éxito o error que vienen del POST
+        
+            //1. Capturar mensajes de éxito o error que vienen del POST
             String successMessage = req.queryParams("message");
             if (successMessage != null && !successMessage.isEmpty()) {
                 model.put("successMessage", successMessage);
@@ -137,7 +136,7 @@ public class AdminController {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 model.put("errorMessage", errorMessage);
             }
-            // 3. Renderizar la plantilla HTML
+            //2. Renderizar la plantilla HTML
             return new ModelAndView(model, "crear_admin.mustache");
         }, new MustacheTemplateEngine());
 
@@ -238,27 +237,12 @@ public class AdminController {
         });
 
         // GET: Ruta para mostrar el dashboard (panel de control) del usuario.
-        // Requiere que el usuario esté autenticado.
         get("/dashboardCarrera", (req, res) -> {
             Map<String, Object> model = new HashMap<>(); // Modelo para la plantilla del dashboard.
-
-            // Intenta obtener el nombre de usuario y la bandera de login de la sesión.
+            // 1. Intenta obtener el nombre de usuario y la bandera de login de la sesión.
             String currentUsername = req.session().attribute("currentUserUsername");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-
-            // 1. Verificar si el usuario ha iniciado sesión.
-            // Si no hay un nombre de usuario en la sesión, la bandera es nula o falsa,
-            // significa que el usuario no está logueado o su sesión expiró.
-            if (currentUsername == null || loggedIn == null || !loggedIn) {
-                System.out.println("DEBUG: Acceso no autorizado a /dashboard. Redirigiendo a /login.");
-                // Redirige al login con un mensaje de error.
-                res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
-                return null; // Importante retornar null después de una redirección.
-            }
-
-            // 2. Si el usuario está logueado, añade el nombre de usuario al modelo para la plantilla.
+            // 2. Añade el nombre de usuario al modelo para la plantilla.
             model.put("username", currentUsername);
-
             // 3. Renderiza la plantilla del dashboard con el nombre de usuario.
             return new ModelAndView(model, "dashboard_carrera.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
@@ -269,36 +253,14 @@ public class AdminController {
             Map<String, Object> model = new HashMap<>(); // Modelo para la plantilla del dashboard.
 
             String currentUsername = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-
-            // Validar sesión
-            if (currentUsername == null || loggedIn == null || !loggedIn) {
-                res.redirect("/?error=Debes iniciar sesión para acceder a esta página.");
-                return null;
-            }
-            // Validar rol (Solo Admins)
-            if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=No tienes permisos para gestionar usuarios.");
-                return null;
-            }
             // Pasamos el nombre de usuario para que el Mustache lo salude
             model.put("username", currentUsername);
             // 3. Renderiza la plantilla del dashboard con el nombre de usuario.
             return new ModelAndView(model, "dashboard_gestUsuario.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
 
-       
-
         get("/reporteRiesgo", (req, res) -> {
-            // 1. Verificación de Seguridad
-            String rol = req.session().attribute("rol");
-            if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=Acceso denegado.");
-                return null;
-            }
-
-            // 2. Consulta SQL corregida según tu schema
+            // Consulta SQL
             String sqlRiesgo = 
                 "SELECT u.nombre, u.apellido, u.dni, u.telefono, e.anioIngreso, " +
                 "COUNT(em.materia_codigo) as total_materias, " +
@@ -332,7 +294,6 @@ public class AdminController {
                 registro.put("colorBadge", colorBadge);
                 alumnosEnRiesgo.add(registro);
             }
-
             Map<String, Object> model = new HashMap<>();
             model.put("alumnosEnRiesgo", alumnosEnRiesgo);
             model.put("totalRiesgo", alumnosEnRiesgo.size());
@@ -341,14 +302,7 @@ public class AdminController {
         }, new MustacheTemplateEngine());
 
         get("/alumnosExcelencia", (req, res) -> {
-            // 1. Verificación de Seguridad
-            String rol = req.session().attribute("rol");
-            if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=Acceso denegado.");
-                return null;
-            }
-
-            // 2. Consulta SQL para buscar a los alumnos destacados
+            // 1. Consulta SQL para buscar a los alumnos destacados
             String sqlExcelencia =
                     "SELECT u.nombre, u.apellido, u.dni, u.telefono, e.anioIngreso, " +
                             "COUNT(em.materia_codigo) as materias_aprobadas, " +
@@ -372,7 +326,7 @@ public class AdminController {
                 String tipoExcelencia;
                 String colorBadge;
 
-                // Clasificación visual (Igual que hiciste con el riesgo, pero en positivo)
+                // Clasificación visual (Igual que con el riesgo, pero en positivo)
                 if (promedio >= 9.0) {
                     tipoExcelencia = "Sobresaliente (Promedio: " + promedio + ")";
                     colorBadge = "bg-green-100 text-green-800 border-green-300"; // Verde para los +9
@@ -386,7 +340,7 @@ public class AdminController {
                 alumnosDestacados.add(registro);
             }
 
-            // 3. Pasamos los datos a Mustache
+            // 2. Pasamos los datos a Mustache
             Map<String, Object> model = new HashMap<>();
             model.put("alumnosDestacados", alumnosDestacados);
             model.put("totalDestacados", alumnosDestacados.size());

@@ -16,9 +16,12 @@ import com.is1.proyecto.models.Profesor;
 import com.is1.proyecto.models.ProfesorMateria;
 import com.is1.proyecto.models.Usuario;
 
+import spark.Filter;
 import spark.ModelAndView;
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.halt;
+import static spark.Spark.before;
 import spark.template.mustache.MustacheTemplateEngine;
 
 public class ProfesorController {
@@ -28,21 +31,55 @@ public class ProfesorController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void registrarRutas(){
+
+        //Definición del filtro de seguridad.
+
+        // A. Filtro Exclusivo para Administradores
+        Filter filtroAdmin = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            } else if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt();
+            }
+        };
+
+        // B. Filtro Exclusivo para Profesores
+        Filter filtroProfesor = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            } else if (!"profesor".equals(rol)) {
+                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Área exclusiva para profesores.", StandardCharsets.UTF_8));
+                halt();
+            }
+        };
+        
+        //Aplicación del filtro a las rutas.
+
+        // Rutas de Administración 
+        before("/registrarProfesor", filtroAdmin);
+        before("/registrarProfesor/new", filtroAdmin);
+        before("/vincularProfesores", filtroAdmin);
+        
+        // Rutas de de Profesor
+        before("/dashboardProfesor", filtroProfesor);
+        before("/perfilProfesor", filtroProfesor);
+        before("/cambiarPasswordProfesor", filtroProfesor);
+        before("/materiasAsignadas", filtroProfesor);
+        before("/cargarNotas/*", filtroProfesor);
+        before("/cargarNotas", filtroProfesor);
+
         get("/registrarProfesor", (req, res) -> {
             Map<String, Object> model = new HashMap<>(); // Crea un mapa para pasar datos a la plantilla.
             String currentUsername = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-            // Validar sesión
-            if (currentUsername == null || loggedIn == null || !loggedIn) {
-                res.redirect("/login?error=Debes iniciar sesión para acceder a esta página.");
-                return null;
-            }
-            // Validar rol (Solo Admins)
-            if (!"administrador".equals(rol)) {
-                res.redirect("/login?error=No tienes permisos para gestionar usuarios.");
-                return null;
-            }
             // Pasamos el nombre de usuario para que el Mustache lo salude
             model.put("username", currentUsername);
             // Obtener y añadir mensaje de error de los query parameters (ej. ?error=Campos vacíos)
@@ -50,7 +87,6 @@ public class ProfesorController {
             if (successMessage != null && !successMessage.isEmpty()) {
                 model.put("successMessage", successMessage);
             }
-            
             String errorMessage = req.queryParams("error");
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 model.put("errorMessage", errorMessage);
@@ -188,15 +224,6 @@ public class ProfesorController {
         // GET: Mostrar el formulario para vincular profesores a materias
         get("/vincularProfesores", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-
-            // Validaciones de sesión y rol de administrador (igual que arriba)
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-            if (loggedIn == null || !loggedIn || !"administrador".equals(rol)) {
-                res.redirect("/login?error=Acceso denegado.");
-                return null;
-            }
-
             // Atajar mensajes de éxito o error
             String successMessage = req.queryParams("successMessage");
             if (successMessage != null) model.put("successMessage", successMessage);
@@ -262,10 +289,8 @@ public class ProfesorController {
 
         get("/dashboardProfesor", (req, res)->{
             Map<String, Object> model = new HashMap<>();
-
             String currentUsername = req.session().attribute("currentUsername");
             model.put("username", currentUsername);
-
             return new ModelAndView(model, "dashboard_profesor.mustache");
         }, new MustacheTemplateEngine());
 
@@ -305,24 +330,15 @@ public class ProfesorController {
 
         get("/materiasAsignadas", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-
-            // 1. Validar que sea un profesor logueado
             String currentUsername = req.session().attribute("username");
-            Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
-
-            if (currentUsername == null || loggedIn == null || !loggedIn || !"profesor".equals(rol)) {
-                res.redirect("/login?error=Acceso denegado. Área exclusiva para profesores.");
-                return null;
-            }
 
             try {
-                // 2. Buscar quién es el profesor que está logueado
+                // 1. Buscar quién es el profesor que está logueado
                 Usuario userLogueado = Usuario.findFirst("username = ?", currentUsername);
                 Profesor profFisico = Profesor.findFirst("usuario_id = ?", userLogueado.getId());
 
                 if (profFisico != null) {
-                    // 3. La consulta mágica (JOIN) para traer todos los datos cruzados
+                    // 2. La consulta mágica (JOIN) para traer todos los datos cruzados
                     // Usamos LEFT JOIN para los planes por si una materia aún no fue vinculada a un plan
                     String sql = "SELECT m.id, m.nombre AS materia_nombre, pm.cargo, p.anio AS plan_anio " +
                             "FROM profesor_materia pm " +
@@ -337,7 +353,6 @@ public class ProfesorController {
                 System.err.println("Error al cargar materias del profesor: " + e.getMessage());
                 model.put("errorMessage", "Error interno al cargar las materias.");
             }
-
             return new ModelAndView(model, "materias_profesor.mustache");
         }, new MustacheTemplateEngine());
 

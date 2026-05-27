@@ -1,25 +1,43 @@
 package com.is1.proyecto.controllers;
 
 import com.is1.proyecto.models.Materia;
+
+import spark.Filter;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import static spark.Spark.post;
+import static spark.Spark.halt;
+import static spark.Spark.before;
+
 
 public class MateriaController {
 
     public static void registrarRutas() {
+
+        //Definición del filtro de seguridad.
+        Filter filtroAdmin = (req, res) -> {
+            Boolean loggedIn = req.session().attribute("loggedIn");
+            String rol = req.session().attribute("rol");
+
+            if (loggedIn == null || !loggedIn) {
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt(); 
+            } else if (!"administrador".equals(rol)) {
+                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt(); 
+            }
+        };
+
+        //Aplicación del filtro a las rutas.
+        before("/crearMateria/new", filtroAdmin);
+        before("/eliminarMateria", filtroAdmin);
 
         post("/crearMateria/new", (req, res) -> {
             String planId = req.queryParams("plan_id");
             String nombre = req.queryParams("nombre");
             String anioCursado = req.queryParams("anio_cursado");
             String cuatrimestre = req.queryParams("cuatrimestre");
-
-            String rol = req.session().attribute("rol");
-            if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=Permiso denegado.");
-                return "";
-            }
 
             try {
                 Materia materia = new Materia();
@@ -40,12 +58,6 @@ public class MateriaController {
 
         post("/eliminarMateria", (req, res) -> {
             String materiaId = req.queryParams("materia_id");
-
-            String rol = req.session().attribute("rol");
-            if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=Permiso denegado.");
-                return "";
-            }
 
             try {
                 Materia materia = Materia.findById(materiaId);
