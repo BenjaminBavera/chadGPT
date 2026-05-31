@@ -53,6 +53,7 @@ public class AdminController {
         before("/gestionUsuario", filtroAdmin);
         before("/reporteRiesgo", filtroAdmin);
         before("/alumnosExcelencia", filtroAdmin);
+        before("/estadisticasGlobales", filtroAdmin);
 
         // --- Rutas GET para renderizar formularios y páginas HTML ---
 
@@ -346,6 +347,85 @@ public class AdminController {
             model.put("totalDestacados", alumnosDestacados.size());
 
             return new ModelAndView(model, "alumnos_excelencia.mustache");
+        }, new MustacheTemplateEngine());
+
+        get("/estadisticasGlobales", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            // 1. Consulta SQL: Rendimiento Global por Carrera
+            String sqlCarreras = 
+                "SELECT c.nombre AS carrera, " +
+                "COUNT(DISTINCT e.id) AS total_estudiantes, " +
+                "ROUND(AVG(em.nota), 2) AS promedio_general " +
+                "FROM carrera c " +
+                "LEFT JOIN estudiante e ON c.id = e.carrera_id " +
+                "LEFT JOIN estudiante_materia em ON e.id = em.estudiante_id " +
+                "GROUP BY c.id, c.nombre " +
+                "ORDER BY c.nombre";
+
+            List<Map> crudasCarreras = Base.findAll(sqlCarreras);
+            List<Map<String, Object>> statsCarreras = new ArrayList<>();
+
+            for (Map fila : crudasCarreras) {
+                Map<String, Object> stat = new HashMap<>(fila);
+                // Manejamos el caso donde la carrera es nueva y el promedio da null
+                if (stat.get("promedio_general") == null) {
+                    stat.put("promedio_general", "-");
+                }
+                statsCarreras.add(stat);
+            }
+
+            // 2. Consulta SQL: Rendimiento Detallado por Materia
+            String sqlMaterias = 
+                "SELECT m.nombre AS materia, " +
+                "c.nombre AS carrera, " +
+                "COUNT(em.estudiante_id) AS cursantes, " +
+                "SUM(CASE WHEN em.estado = 'aprobada' THEN 1 ELSE 0 END) AS aprobados, " +
+                "ROUND(AVG(em.nota), 2) AS promedio_notas " +
+                "FROM materia m " +
+                "JOIN plan p ON m.plan_id = p.id " +
+                "JOIN carrera c ON p.carrera_id = c.id " +
+                "LEFT JOIN estudiante_materia em ON m.id = em.materia_codigo " +
+                "GROUP BY m.id, m.nombre, c.nombre " +
+                "ORDER BY c.nombre, m.nombre";
+
+            List<Map> crudasMaterias = Base.findAll(sqlMaterias);
+            List<Map<String, Object>> statsMaterias = new ArrayList<>();
+
+            for (Map fila : crudasMaterias) {
+                Map<String, Object> stat = new HashMap<>(fila);
+                
+                long cursantes = ((Number) stat.get("cursantes")).longValue();
+                long aprobados = stat.get("aprobados") != null ? ((Number) stat.get("aprobados")).longValue() : 0;
+                
+                // Calculamos la tasa de aprobación (Porcentaje) en Java
+                String tasaAprobacion = "0%";
+                String colorTasa = "text-gray-500";
+                
+                if (cursantes > 0) {
+                    long porcentaje = (aprobados * 100) / cursantes;
+                    tasaAprobacion = porcentaje + "%";
+                    
+                    // Lógica de colores para identificar cuellos de botella
+                    if (porcentaje >= 70) colorTasa = "text-green-600 font-bold";
+                    else if (porcentaje >= 40) colorTasa = "text-yellow-600 font-bold";
+                    else colorTasa = "text-red-600 font-bold"; // Alerta: Materia "filtro"
+                }
+
+                stat.put("tasa_aprobacion", tasaAprobacion);
+                stat.put("color_tasa", colorTasa);
+                
+                if (stat.get("promedio_notas") == null) {
+                    stat.put("promedio_notas", "-");
+                }
+
+                statsMaterias.add(stat);
+            }
+
+            model.put("statsCarreras", statsCarreras);
+            model.put("statsMaterias", statsMaterias);
+
+            return new ModelAndView(model, "estadisticas_globales.mustache");
         }, new MustacheTemplateEngine());
 
     }
