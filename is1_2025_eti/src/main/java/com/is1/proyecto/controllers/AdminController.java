@@ -54,6 +54,8 @@ public class AdminController {
         before("/reporteRiesgo", filtroAdmin);
         before("/alumnosExcelencia", filtroAdmin);
         before("/estadisticasGlobales", filtroAdmin);
+        before("/dashboardReportes", filtroAdmin);
+        before("/dashboardAcademico", filtroAdmin);
 
         // --- Rutas GET para renderizar formularios y páginas HTML ---
 
@@ -426,6 +428,24 @@ public class AdminController {
             model.put("statsMaterias", statsMaterias);
 
             return new ModelAndView(model, "estadisticas_globales.mustache");
+        }, new MustacheTemplateEngine());
+
+        get("/dashboardReportes", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            
+            String currentUsername = req.session().attribute("username");
+            model.put("username", currentUsername);
+            
+            return new ModelAndView(model, "dashboard_ReportesEstadisticas.mustache");
+        }, new MustacheTemplateEngine());
+
+        get("/dashboardAcademico", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            
+            String currentUsername = req.session().attribute("username");
+            model.put("username", currentUsername);
+            
+            return new ModelAndView(model, "dashboard_GestionAcademica.mustache");
         }, new MustacheTemplateEngine());
 
     }
