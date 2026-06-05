@@ -330,12 +330,12 @@ public class EstudianteController {
                 return new ModelAndView(model, "inscripcion.mustache");
             }
 
-            // Si tiene carrera, cargamos las materias
+            // Si tiene carrera, cargamos las materias (excluyendo las ya aprobadas)
             List<Map> inscripciones = Base.findAll(
                 "SELECT m.id, m.nombre, m.anio_cursado, m.cuatrimestre, em.estado " +
                 "FROM estudiante_materia em " +
                 "JOIN materia m ON em.materia_codigo = m.id " +
-                "WHERE em.estudiante_id = ?",
+                "WHERE em.estudiante_id = ? AND em.estado != 'aprobada'",
                 estudiante.getId()
             );
 
