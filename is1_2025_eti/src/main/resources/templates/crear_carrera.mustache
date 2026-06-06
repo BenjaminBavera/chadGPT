@@ -2,9 +2,6 @@
 
 <script>document.title = "Crear Carrera";</script>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-</body>
-
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl my-8">
     <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Gestión de Carreras y Materias</h1>
 
@@ -43,7 +40,7 @@
                 <div>
                     <label for="carrera_id" class="block text-gray-700 text-sm font-medium mb-1">Pertenece a Carrera:</label>
                     <select id="carrera_id" name="carrera_id" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>-- Seleccione una Carrera --</option>
                         {{#carreras}}
                             <option value="{{id}}">{{nombre}}</option>
@@ -53,7 +50,7 @@
                 <div>
                     <label for="anio_plan" class="block text-gray-700 text-sm font-medium mb-1">Año del Plan:</label>
                     <input type="number" id="anio_plan" name="anio" required placeholder="Ej: 2024" min="1950"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                           class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 dark:text-white">
                 </div>
                 <button type="submit"
                         class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -70,7 +67,7 @@
                 <div>
                     <label for="plan_id" class="block text-gray-700 text-sm font-medium mb-1">Asignar al Plan:</label>
                     <select id="plan_id" name="plan_id" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white">
                         <option value="" disabled selected>-- Seleccione un Plan --</option>
                         {{#planes}}
                             <option value="{{id}}">Plan {{anio}} - {{carreraNombre}}</option>
@@ -108,35 +105,30 @@
     <div class="overflow-x-auto mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-            <tr class="bg-gray-200 text-gray-700 text-sm">
-                <th class="p-3 border-b border-gray-300 rounded-tl-md">ID</th>
-                <th class="p-3 border-b border-gray-300">Nombre</th>
-                <th class="p-3 border-b border-gray-300">Año</th>
-                <th class="p-3 border-b border-gray-300">Cuat.</th>
-                <th class="p-3 border-b border-gray-300 text-center rounded-tr-md">Acción</th>
+            <tr class="bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200 text-sm">
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600 rounded-tl-md">ID</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Nombre</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Año</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Cuat.</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600 text-center rounded-tr-md">Acción</th>
             </tr>
             </thead>
-            <tbody class="text-sm">
+            <tbody class="text-sm text-gray-800 dark:text-gray-300">
             {{#materias}}
-                <tr class="hover:bg-gray-100 border-b border-gray-200">
+                <tr class="hover:bg-gray-100 dark:hover:bg-slate-700 border-b border-gray-200 dark:border-slate-700">
                     <td class="p-3">{{id}}</td>
-                    <td class="p-3 font-semibold text-gray-700">{{nombre}}</td>
+                    <td class="p-3 font-semibold">{{nombre}}</td>
                     <td class="p-3">{{anioCursado}}°</td>
                     <td class="p-3">{{cuatrimestre}}</td>
                     <td class="p-3 text-center">
                         <form action="/eliminarMateria" method="POST" class="inline">
                             <input type="hidden" name="materia_id" value="{{id}}">
-                            <button type="submit" class="text-red-600 hover:text-red-800 font-medium transition"
+                            <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium transition"
                                     onclick="return confirm('¿Está seguro de eliminar esta materia?')">
                                 Eliminar
                             </button>
                         </form>
                     </td>
-                </tr>
-            {{/materias}}
-            {{^materias}}
-                <tr>
-                    <td colspan="5" class="p-4 text-center text-gray-500">No hay materias cargadas en el sistema.</td>
                 </tr>
             {{/materias}}
             </tbody>

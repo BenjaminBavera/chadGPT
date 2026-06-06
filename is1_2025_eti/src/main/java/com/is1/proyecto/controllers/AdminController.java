@@ -77,6 +77,7 @@ public class AdminController {
                 model.put("errorMessage", errorMessage);
             }
 
+            model.put("esAdmin", true);
             // Renderiza la plantilla 'user_form.mustache' con los datos del modelo.
             return new ModelAndView(model, "user_form.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
@@ -87,6 +88,7 @@ public class AdminController {
             String username = req.session().attribute("username");
             model.put("username", username);
             // Asegúrate de que el nombre del archivo coincida con el que tenías para el admin
+            model.put("esAdmin",true);
             return new ModelAndView(model, "dashboard.mustache");
         }, new MustacheTemplateEngine());
 
@@ -118,6 +120,7 @@ public class AdminController {
             if (successMessage != null && !successMessage.isEmpty()) {
                 model.put("successMessage", successMessage);
             }
+            model.put("esAdmin", true);
             return new ModelAndView(model, "login.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
 
@@ -140,6 +143,7 @@ public class AdminController {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 model.put("errorMessage", errorMessage);
             }
+            model.put("esAdmin", true);
             //2. Renderizar la plantilla HTML
             return new ModelAndView(model, "crear_admin.mustache");
         }, new MustacheTemplateEngine());
@@ -248,6 +252,7 @@ public class AdminController {
             // 2. Añade el nombre de usuario al modelo para la plantilla.
             model.put("username", currentUsername);
             // 3. Renderiza la plantilla del dashboard con el nombre de usuario.
+            model.put("esAdmin",true);
             return new ModelAndView(model, "dashboard_carrera.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
 
@@ -260,6 +265,7 @@ public class AdminController {
             // Pasamos el nombre de usuario para que el Mustache lo salude
             model.put("username", currentUsername);
             // 3. Renderiza la plantilla del dashboard con el nombre de usuario.
+            model.put("esAdmin",true);
             return new ModelAndView(model, "dashboard_gestUsuario.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
 
@@ -301,6 +307,8 @@ public class AdminController {
             Map<String, Object> model = new HashMap<>();
             model.put("alumnosEnRiesgo", alumnosEnRiesgo);
             model.put("totalRiesgo", alumnosEnRiesgo.size());
+
+            model.put("esAdmin",true);
 
             return new ModelAndView(model, "reporte_riesgo.mustache");
         }, new MustacheTemplateEngine());
@@ -348,6 +356,8 @@ public class AdminController {
             Map<String, Object> model = new HashMap<>();
             model.put("alumnosDestacados", alumnosDestacados);
             model.put("totalDestacados", alumnosDestacados.size());
+
+            model.put("esAdmin",true);
 
             return new ModelAndView(model, "alumnos_excelencia.mustache");
         }, new MustacheTemplateEngine());
@@ -427,6 +437,7 @@ public class AdminController {
 
             model.put("statsCarreras", statsCarreras);
             model.put("statsMaterias", statsMaterias);
+            model.put("esAdmin",true);
 
             return new ModelAndView(model, "estadisticas_globales.mustache");
         }, new MustacheTemplateEngine());
@@ -436,6 +447,7 @@ public class AdminController {
             
             String currentUsername = req.session().attribute("username");
             model.put("username", currentUsername);
+            model.put("esAdmin",true);
             
             return new ModelAndView(model, "dashboard_ReportesEstadisticas.mustache");
         }, new MustacheTemplateEngine());
@@ -452,7 +464,7 @@ public class AdminController {
                 String estadoInscripciones = config.get(0).get("valor").toString();
                 model.put("inscripcionesAbiertas", estadoInscripciones.equals("abierto"));
             }
-            
+            model.put("esAdmin",true);
             return new ModelAndView(model, "dashboard_GestionAcademica.mustache");
         }, new MustacheTemplateEngine());
 
@@ -471,6 +483,7 @@ public class AdminController {
             String error = req.queryParams("error");
             if (message != null) model.put("message", message);
             if (error != null) model.put("error", error);
+            model.put("esAdmin",true);
             return new ModelAndView(model, "perfil_admin.mustache");
         }, new MustacheTemplateEngine());
 
@@ -505,7 +518,7 @@ public class AdminController {
             String estadoInscripciones = config.get(0).get("valor").toString();
             model.put("inscripcionesAbiertas", estadoInscripciones.equals("abierto"));
             model.put("estadoInscripciones", estadoInscripciones);
-
+            model.put("esAdmin",true);
             return new ModelAndView(model, "settings.mustache");
         }, new MustacheTemplateEngine());
 

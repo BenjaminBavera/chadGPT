@@ -2,67 +2,65 @@
 
 <script>document.title = "Mi Perfil";</script>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-</body>
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+<div class="w-full tarjeta-moderna p-8 max-w-xl">
 
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
         Mi Perfil
     </h1>
 
     {{#message}}
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-        {{message}}
-    </div>
+        <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded mb-6">
+            {{message}}
+        </div>
     {{/message}}
 
     {{#error}}
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-        {{error}}
-    </div>
+        <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6">
+            {{error}}
+        </div>
     {{/error}}
 
-    <!-- DATOS -->
-    <div class="bg-blue-50 p-6 rounded-md border border-blue-200 mb-6">
-        <h2 class="text-xl font-semibold text-blue-900 mb-4 border-b pb-2">
+    <div class="bg-blue-50 dark:bg-slate-800/50 p-6 rounded-md border border-blue-200 dark:border-slate-700 mb-6">
+        <h2 class="text-xl font-semibold text-blue-900 dark:text-blue-300 mb-4 border-b border-blue-200 dark:border-slate-600 pb-2">
             Información Personal
         </h2>
 
-        <p><b>Usuario:</b> {{usuario.username}}</p>
-        <p><b>Nombre:</b> {{usuario.name}} {{usuario.apellido}}</p>
-        <p><b>DNI:</b> {{usuario.dni}}</p>
+        <div class="text-gray-800 dark:text-gray-200 space-y-2">
+            <p><b class="text-gray-900 dark:text-white">Usuario:</b> {{usuario.username}}</p>
+            <p><b class="text-gray-900 dark:text-white">Nombre:</b> {{usuario.name}} {{usuario.apellido}}</p>
+            <p><b class="text-gray-900 dark:text-white">DNI:</b> {{usuario.dni}}</p>
+        </div>
     </div>
 
-    <!-- CAMBIAR PASSWORD -->
     <form action="/cambiarPassword" method="POST" class="space-y-4">
 
-        <h2 class="text-lg font-semibold text-gray-700">
+        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">
             Cambiar Contraseña
         </h2>
 
         <input type="password" name="actual" placeholder="Contraseña actual"
-            class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400" required>
+               class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
 
         <input type="password" name="nueva" placeholder="Nueva contraseña"
-            class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400" required>
+               class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
 
         <button type="submit"
-            class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors">
             Actualizar Contraseña
         </button>
     </form>
 
-    <!-- BOTONES -->
     <div class="flex flex-col gap-2 mt-6">
         <button onclick="window.location.href='/dashboardEstudiante'"
-            class="w-full bg-gray-300 py-2 rounded hover:bg-gray-400">
+                class="w-full bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 py-2 rounded hover:bg-gray-400 dark:hover:bg-slate-600 transition-colors">
             Volver
         </button>
 
-        <a href="/logout" class="text-center text-red-600 hover:underline">
+        <a href="/logout" class="text-center text-red-600 dark:text-red-400 hover:underline mt-2">
             Cerrar Sesión
         </a>
     </div>
 
 </div>
+
 {{> footer}}

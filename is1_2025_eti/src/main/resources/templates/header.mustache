@@ -4,32 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Universitario</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
-        // Lector rápido para evitar el parpadeo blanco
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
+    <script>
         if (localStorage.getItem('tema') === 'oscuro') {
             document.documentElement.classList.add('dark');
         }
     </script>
 
     <style>
-        .dark body { background-color: #1a1a2e; color: #e0e0e0; }
-        .dark .bg-white { background-color: #16213e; border-color: #0f3460; }
-        .dark .text-gray-800 { color: #e0e0e0; }
-        .dark .text-gray-700 { color: #a0a0a0; }
-        .dark input { background-color: #1a1a2e; color: #e0e0e0; border-color: #0f3460; }
+        body { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); }
+        .dark body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #f8fafc; }
+
+        .tarjeta-moderna {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border-radius: 1rem;
+        }
+        .dark .tarjeta-moderna {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300 relative">
+<body class="flex flex-col min-h-screen transition-colors duration-300">
 
-<div class="fixed top-4 right-4 flex items-center gap-2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md border border-gray-200 dark:border-gray-700 z-50">
-    <span class="text-sm">☀️</span>
-    <button onclick="toggleTemaGlobal()" id="btn-tema-global" class="relative inline-flex items-center w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none bg-gray-300">
-        <span id="circulo-tema-global" class="inline-block w-4 h-4 bg-white rounded-full shadow transform transition-transform duration-300 translate-x-1"></span>
-    </button>
-    <span class="text-sm">🌙</span>
-</div>
+<nav class="bg-blue-700 dark:bg-slate-900 shadow-md sticky top-0 z-50 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg text-white">🎓</div>
+                <span class="font-bold text-white text-xl tracking-tight">Sistema Universitario</span>
+            </div>
+
+            <div class="flex-1"></div>
+
+            <div class="flex items-center gap-4">
+
+                <div class="flex items-center gap-2 bg-blue-800/50 dark:bg-slate-800 p-1.5 rounded-full border border-blue-600 dark:border-slate-700">
+                    <span class="text-xs">☀️</span>
+                    <button onclick="toggleTemaGlobal()" id="btn-tema-global" class="relative inline-flex items-center w-10 h-5 rounded-full transition-colors duration-300 focus:outline-none bg-blue-400 dark:bg-indigo-500">
+                        <span id="circulo-tema-global" class="inline-block w-3.5 h-3.5 bg-white rounded-full shadow transform transition-transform duration-300 translate-x-1"></span>
+                    </button>
+                    <span class="text-xs">🌙</span>
+                </div>
+
+                <a href="/logout" class="bg-red-500/90 hover:bg-red-600 text-white px-4 py-1.5 rounded-md text-sm font-medium shadow-sm transition-colors">
+                    Salir
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <script>
     function aplicarEstadoTemaGlobal() {
@@ -38,15 +79,11 @@
         if (!btn || !circulo) return;
 
         if (localStorage.getItem('tema') === 'oscuro') {
-            btn.classList.remove('bg-gray-300');
-            btn.classList.add('bg-indigo-600');
             circulo.classList.remove('translate-x-1');
-            circulo.classList.add('translate-x-7'); // Se mueve a la derecha
+            circulo.classList.add('translate-x-5');
         } else {
-            btn.classList.remove('bg-indigo-600');
-            btn.classList.add('bg-gray-300');
-            circulo.classList.remove('translate-x-7');
-            circulo.classList.add('translate-x-1'); // Vuelve a la izquierda
+            circulo.classList.remove('translate-x-5');
+            circulo.classList.add('translate-x-1');
         }
     }
 
@@ -62,6 +99,7 @@
         aplicarEstadoTemaGlobal();
     }
 
-    // Ejecutar animación cuando cargue el botón
     document.addEventListener('DOMContentLoaded', aplicarEstadoTemaGlobal);
 </script>
+
+<main class="flex-1 flex flex-col items-center justify-center p-6 md:p-10 w-full max-w-6xl mx-auto">

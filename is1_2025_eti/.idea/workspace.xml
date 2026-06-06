@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10ed7b19-792e-4695-acb8-56f847f45a22" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/footer.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/dev.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/dev.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/EstudianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/is1/proyecto/controllers/EstudianteController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/alumnos_excelencia.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/alumnos_excelencia.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/asignar_correlativas.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/asignar_correlativas.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/cargar_notas.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/cargar_notas.mustache" afterDir="false" />
@@ -19,12 +18,16 @@
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_GestionAcademica.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_GestionAcademica.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_ReportesEstadisticas.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_ReportesEstadisticas.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_carrera.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_carrera.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_estudiante.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_estudiante.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_gestUsuario.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_gestUsuario.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/dashboard_profesor.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/dashboard_profesor.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/detalle_materia.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/detalle_materia.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/estadisticas_globales.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/estadisticas_globales.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/estado_academico.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/estado_academico.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/footer.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/footer.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/header.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/header.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/hello.mustache" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/inscripcion.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/inscripcion.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/inscriptos_por_materia.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/inscriptos_por_materia.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.mustache" afterDir="false" />
@@ -39,8 +42,6 @@
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/vincular_profesores.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/vincular_profesores.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/dashboard.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/registrarProfesor.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/registrarProfesor.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

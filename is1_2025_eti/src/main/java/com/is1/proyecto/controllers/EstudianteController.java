@@ -106,6 +106,7 @@ public class EstudianteController {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 model.put("errorMessage", errorMessage);
             }
+            model.put("esEstudiante",true);
             // Renderiza la plantilla 'registrarEstudiante.mustache' con los datos del modelo.
             return new ModelAndView(model, "registrarEstudiante.mustache");
         }, new MustacheTemplateEngine()); // Especifica el motor de plantillas para esta ruta.
@@ -216,7 +217,7 @@ public class EstudianteController {
 
             String currentUsername = req.session().attribute("currentUsername");
             model.put("username", currentUsername);
-
+            model.put("esEstudiante",true);
             return new ModelAndView(model, "dashboard_estudiante.mustache");
         }, new MustacheTemplateEngine());
 
@@ -233,6 +234,7 @@ public class EstudianteController {
                 // No tiene carrera, mandamos las carreras disponibles para que elija
                 model.put("carreras", Carrera.findAll());
                 model.put("sinCarrera", true);
+                model.put("esEstudiante",true);
                 return new ModelAndView(model, "inscripcion.mustache");
             }
 
@@ -261,7 +263,7 @@ public class EstudianteController {
             model.put("usuario", usuarioData);
             model.put("estudiante", estudiante);
             model.put("materias", materias);
-
+            model.put("esEstudiante",true);
             return new ModelAndView(model, "estado_academico.mustache");
 
         }, new MustacheTemplateEngine());
@@ -276,6 +278,7 @@ public class EstudianteController {
             String error = req.queryParams("error");
             if (message != null) model.put("message", message);
             if (error != null) model.put("error", error);
+            model.put("esEstudiante",true);
             return new ModelAndView(model, "perfil_estudiante.mustache");
         }, new MustacheTemplateEngine());
 
@@ -327,6 +330,7 @@ public class EstudianteController {
                 if (success != null && !success.isEmpty()) {
                     model.put("successMessage", success);
                 }
+                model.put("esEstudiante",true);
                 return new ModelAndView(model, "inscripcion.mustache");
             }
 
@@ -382,6 +386,7 @@ public class EstudianteController {
             }
 
             model.put("estudianteLogueado", estudiante);
+            model.put("esEstudiante",true);
             return new ModelAndView(model, "inscripcion.mustache");
         }, new MustacheTemplateEngine());
 
