@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuraciones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (localStorage.getItem('tema') === 'oscuro') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <style>
+        .dark body { background-color: #1a1a2e; }
+        .dark .container { background-color: #16213e; }
+        .dark h1, .dark h2, .dark label { color: #e0e0e0; }
+        .dark p { color: #a0a0a0; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div class="container bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl my-8">
+
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Configuraciones</h1>
+
+    <!-- TEMA -->
+    <div class="bg-gray-50 p-6 rounded-md border border-gray-200 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Tema de la Aplicación</h2>
+        <p class="text-gray-600 mb-4">Cambiá entre el modo claro y oscuro.</p>
+        <div class="flex items-center gap-4">
+            <span class="text-gray-700 text-sm font-medium">Claro</span>
+            <button onclick="toggleTema()"
+                    id="btn-tema"
+                    class="relative inline-flex items-center w-14 h-7 rounded-full transition-colors duration-300 focus:outline-none bg-gray-300">
+                <span id="circulo-tema"
+                      class="inline-block w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-300 translate-x-1"></span>
+            </button>
+            <span class="text-gray-700 text-sm font-medium">Oscuro</span>
+        </div>
+    </div>
+
+    <!-- INSCRIPCIONES -->
+        <div class="bg-gray-50 p-6 rounded-md border border-gray-200 mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">Período de Inscripciones</h2>
+            <p class="text-gray-600 mb-4">
+                Estado actual: 
+                {{#inscripcionesAbiertas}}
+                    <span class="text-green-600 font-semibold">Abierto</span>
+                {{/inscripcionesAbiertas}}
+                {{^inscripcionesAbiertas}}
+                    <span class="text-red-600 font-semibold">Cerrado</span>
+                {{/inscripcionesAbiertas}}
+            </p>
+            <form action="/toggleInscripciones" method="POST">
+                {{#inscripcionesAbiertas}}
+                    <button type="submit"
+                            class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 font-semibold">
+                        Cerrar Inscripciones
+                    </button>
+                {{/inscripcionesAbiertas}}
+                {{^inscripcionesAbiertas}}
+                    <button type="submit"
+                            class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 font-semibold">
+                        Abrir Inscripciones
+                    </button>
+                {{/inscripcionesAbiertas}}
+            </form>
+        </div>
+
+    <button type="button" onclick="window.location.href='/dashboard'"
+            class="w-full bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400">
+        Volver al Dashboard
+    </button>
+
+</div>
+
+<script>
+    const html = document.getElementById('html-root');
+    const btn = document.getElementById('btn-tema');
+    const circulo = document.getElementById('circulo-tema');
+
+    function aplicarEstadoTema() {
+        if (localStorage.getItem('tema') === 'oscuro') {
+            btn.classList.remove('bg-gray-300');
+            btn.classList.add('bg-indigo-600');
+            circulo.classList.remove('translate-x-1');
+            circulo.classList.add('translate-x-8');
+        } else {
+            btn.classList.remove('bg-indigo-600');
+            btn.classList.add('bg-gray-300');
+            circulo.classList.remove('translate-x-8');
+            circulo.classList.add('translate-x-1');
+        }
+    }
+
+    function toggleTema() {
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('tema', 'claro');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('tema', 'oscuro');
+        }
+        aplicarEstadoTema();
+    }
+
+    // Aplicar estado inicial del toggle
+    aplicarEstadoTema();
+</script>
+</body>
+</html>

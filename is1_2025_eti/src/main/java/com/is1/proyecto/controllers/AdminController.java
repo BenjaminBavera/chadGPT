@@ -1,10 +1,5 @@
 package com.is1.proyecto.controllers;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.halt;
-import static spark.Spark.before;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,6 +16,10 @@ import com.is1.proyecto.models.Usuario;
 
 import spark.Filter;
 import spark.ModelAndView;
+import static spark.Spark.before;
+import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.post;
 import spark.template.mustache.MustacheTemplateEngine;
 
 public class AdminController {
@@ -56,6 +55,8 @@ public class AdminController {
         before("/estadisticasGlobales", filtroAdmin);
         before("/dashboardReportes", filtroAdmin);
         before("/dashboardAcademico", filtroAdmin);
+        before("/profile", filtroAdmin);
+        before("/settings", filtroAdmin);
 
         // --- Rutas GET para renderizar formularios y páginas HTML ---
 
@@ -447,6 +448,68 @@ public class AdminController {
             
             return new ModelAndView(model, "dashboard_GestionAcademica.mustache");
         }, new MustacheTemplateEngine());
+
+        get("/profile", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            Integer usuarioId = req.session().attribute("usuario_id");
+            Usuario user = Usuario.findById(usuarioId);
+            Map<String, Object> usuarioData = new HashMap<>();
+            usuarioData.put("nombre", user.getString("nombre"));
+            usuarioData.put("apellido", user.getString("apellido"));
+            usuarioData.put("dni", user.getString("dni"));
+            usuarioData.put("username", user.getString("username"));
+            usuarioData.put("telefono", user.getString("telefono"));
+            model.put("usuario", usuarioData);
+            String message = req.queryParams("message");
+            String error = req.queryParams("error");
+            if (message != null) model.put("message", message);
+            if (error != null) model.put("error", error);
+            return new ModelAndView(model, "perfil_admin.mustache");
+        }, new MustacheTemplateEngine());
+
+        post("/cambiarPasswordAdmin", (req, res) -> {
+            int usuarioId = req.session().attribute("usuario_id");
+            String actual = req.queryParams("actual");
+            String nueva = req.queryParams("nueva");
+            Usuario user = Usuario.findById(usuarioId);
+            if (nueva.length() < 4) {
+                String err = URLEncoder.encode("Contrasena muy corta", StandardCharsets.UTF_8.toString());
+                res.redirect("/profile?error=" + err);
+                return null;
+            }
+            if (!BCrypt.checkpw(actual, user.getPassword())) {
+                String err = URLEncoder.encode("Contrasena actual incorrecta", StandardCharsets.UTF_8.toString());
+                res.redirect("/profile?error=" + err);
+                return null;
+            }
+            user.setPassword(BCrypt.hashpw(nueva, BCrypt.gensalt()));
+            user.saveIt();
+            String msg = URLEncoder.encode("Contrasena actualizada correctamente", StandardCharsets.UTF_8.toString());
+            res.redirect("/profile?message=" + msg);
+            return null;
+        });
+
+        get("/settings", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String username = req.session().attribute("username");
+            model.put("username", username);
+
+            List<Map> config = Base.findAll("SELECT valor FROM configuracion WHERE clave = 'inscripciones'");
+            String estadoInscripciones = config.get(0).get("valor").toString();
+            model.put("inscripcionesAbiertas", estadoInscripciones.equals("abierto"));
+            model.put("estadoInscripciones", estadoInscripciones);
+
+            return new ModelAndView(model, "settings.mustache");
+        }, new MustacheTemplateEngine());
+
+        post("/toggleInscripciones", (req, res) -> {
+            List<Map> config = Base.findAll("SELECT valor FROM configuracion WHERE clave = 'inscripciones'");
+            String estadoActual = config.get(0).get("valor").toString();
+            String nuevoEstado = estadoActual.equals("abierto") ? "cerrado" : "abierto";
+            Base.exec("UPDATE configuracion SET valor = ? WHERE clave = 'inscripciones'", nuevoEstado);
+            res.redirect("/settings");
+            return null;
+        });
 
     }
 }

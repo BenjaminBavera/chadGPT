@@ -20,10 +20,10 @@ import com.is1.proyecto.models.Usuario;
 
 import spark.Filter;
 import spark.ModelAndView;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.halt;
 import static spark.Spark.before;
+import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.post;
 import spark.template.mustache.MustacheTemplateEngine;
 
 
@@ -387,6 +387,13 @@ public class EstudianteController {
 
          post("/inscribir", (req, res) -> {
             
+            List<Map> config = Base.findAll("SELECT valor FROM configuracion WHERE clave = 'inscripciones'");
+            if (config.isEmpty() || !"abierto".equals(config.get(0).get("valor"))) {
+                String err = URLEncoder.encode("Las inscripciones estan cerradas.", StandardCharsets.UTF_8.toString());
+                res.redirect("/inscripcion?error=" + err);
+                return null;
+            }
+
             int materiaID = Integer.parseInt(req.queryParams("materia_id"));
             Integer usuarioId = req.session().attribute("usuario_id");
             Estudiante estudiante = Estudiante.findFirst("usuario_id = ?", usuarioId);

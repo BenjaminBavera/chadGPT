@@ -88,3 +88,8 @@ CREATE TABLE IF NOT EXISTS profesor_materia(
     FOREIGN KEY (profesor_id) REFERENCES profesor(id) ON DELETE CASCADE,
     FOREIGN KEY (materia_id) REFERENCES materia(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS configuracion (
+    clave TEXT PRIMARY KEY,
+    valor TEXT NOT NULL
+);
