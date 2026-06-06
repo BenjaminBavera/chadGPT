@@ -445,6 +445,13 @@ public class AdminController {
             
             String currentUsername = req.session().attribute("username");
             model.put("username", currentUsername);
+
+            // Consultamos si las inscripciones están abiertas o cerradas
+            List<Map> config = Base.findAll("SELECT valor FROM configuracion WHERE clave = 'inscripciones'");
+            if (!config.isEmpty()) {
+                String estadoInscripciones = config.get(0).get("valor").toString();
+                model.put("inscripcionesAbiertas", estadoInscripciones.equals("abierto"));
+            }
             
             return new ModelAndView(model, "dashboard_GestionAcademica.mustache");
         }, new MustacheTemplateEngine());
@@ -504,10 +511,13 @@ public class AdminController {
 
         post("/toggleInscripciones", (req, res) -> {
             List<Map> config = Base.findAll("SELECT valor FROM configuracion WHERE clave = 'inscripciones'");
-            String estadoActual = config.get(0).get("valor").toString();
-            String nuevoEstado = estadoActual.equals("abierto") ? "cerrado" : "abierto";
-            Base.exec("UPDATE configuracion SET valor = ? WHERE clave = 'inscripciones'", nuevoEstado);
-            res.redirect("/settings");
+            if (!config.isEmpty()) {
+                String estadoActual = config.get(0).get("valor").toString();
+                String nuevoEstado = estadoActual.equals("abierto") ? "cerrado" : "abierto";
+                Base.exec("UPDATE configuracion SET valor = ? WHERE clave = 'inscripciones'", nuevoEstado);
+            }
+            
+            res.redirect("/dashboardAcademico"); 
             return null;
         });
 

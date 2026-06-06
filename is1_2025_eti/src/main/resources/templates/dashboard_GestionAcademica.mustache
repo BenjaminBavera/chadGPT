@@ -39,6 +39,36 @@
         </div>
 
     </div>
+
+    <div class="bg-gray-50 p-6 rounded-md border border-gray-200 mb-8 flex flex-col md:flex-row items-center justify-between shadow-sm">
+        <div class="text-center md:text-left mb-4 md:mb-0">
+            <h2 class="text-xl font-semibold text-gray-800 mb-1">Período de Inscripciones</h2>
+            <p class="text-gray-600">
+                Estado actual: 
+                {{#inscripcionesAbiertas}}
+                    <span class="text-green-700 font-bold bg-green-100 px-3 py-1 rounded-full ml-1 text-sm border border-green-300">Abierto</span>
+                {{/inscripcionesAbiertas}}
+                {{^inscripcionesAbiertas}}
+                    <span class="text-red-700 font-bold bg-red-100 px-3 py-1 rounded-full ml-1 text-sm border border-red-300">Cerrado</span>
+                {{/inscripcionesAbiertas}}
+            </p>
+        </div>
+        
+        <form action="/toggleInscripciones" method="POST">
+            {{#inscripcionesAbiertas}}
+                <button type="submit"
+                        class="bg-red-600 text-white py-2 px-6 rounded-md hover:bg-red-700 font-semibold transition duration-300 shadow-sm focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    Cerrar Inscripciones
+                </button>
+            {{/inscripcionesAbiertas}}
+            {{^inscripcionesAbiertas}}
+                <button type="submit"
+                        class="bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 font-semibold transition duration-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    Abrir Inscripciones
+                </button>
+            {{/inscripcionesAbiertas}}
+        </form>
+    </div>
     
     <button type="button" onclick="window.location.href='/dashboard'"
             class="w-full bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 mt-2">
