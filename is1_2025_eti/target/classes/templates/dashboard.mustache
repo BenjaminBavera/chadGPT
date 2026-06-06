@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="es" id="html-root">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Bienvenido</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Aplicar tema antes de que cargue la página para evitar parpadeo
-        if (localStorage.getItem('tema') === 'oscuro') {
-            document.documentElement.classList.add('dark');
-        }
-    </script>
-    <style>
-        .dark body { background-color: #1a1a2e; }
-        .dark .card { background-color: #16213e; border-color: #0f3460; }
-        .dark .card h2 { color: #e0e0e0; }
-        .dark .card p { color: #a0a0a0; }
-        .dark .container { background-color: #16213e; }
-        .dark h1 { color: #e0e0e0; }
-        .dark .bienvenida { color: #a0a0a0; }
-    </style>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+{{> header}}
     <div class="container bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Panel de Control</h1>
 
@@ -70,18 +47,4 @@
             </a>
         </div>
     </div>
-
-    <script>
-        function toggleTema() {
-            const html = document.getElementById('html-root');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('tema', 'claro');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('tema', 'oscuro');
-            }
-        }
-    </script>
-</body>
-</html>
+{{> footer}}

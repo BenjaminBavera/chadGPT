@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Universitario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        // Lector rápido para evitar el parpadeo blanco
+        if (localStorage.getItem('tema') === 'oscuro') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+    <style>
+        .dark body { background-color: #1a1a2e; color: #e0e0e0; }
+        .dark .bg-white { background-color: #16213e; border-color: #0f3460; }
+        .dark .text-gray-800 { color: #e0e0e0; }
+        .dark .text-gray-700 { color: #a0a0a0; }
+        .dark input { background-color: #1a1a2e; color: #e0e0e0; border-color: #0f3460; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300 relative">
+
+<div class="fixed top-4 right-4 flex items-center gap-2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md border border-gray-200 dark:border-gray-700 z-50">
+    <span class="text-sm">☀️</span>
+    <button onclick="toggleTemaGlobal()" id="btn-tema-global" class="relative inline-flex items-center w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none bg-gray-300">
+        <span id="circulo-tema-global" class="inline-block w-4 h-4 bg-white rounded-full shadow transform transition-transform duration-300 translate-x-1"></span>
+    </button>
+    <span class="text-sm">🌙</span>
+</div>
+
+<script>
+    function aplicarEstadoTemaGlobal() {
+        const btn = document.getElementById('btn-tema-global');
+        const circulo = document.getElementById('circulo-tema-global');
+        if (!btn || !circulo) return;
+
+        if (localStorage.getItem('tema') === 'oscuro') {
+            btn.classList.remove('bg-gray-300');
+            btn.classList.add('bg-indigo-600');
+            circulo.classList.remove('translate-x-1');
+            circulo.classList.add('translate-x-7'); // Se mueve a la derecha
+        } else {
+            btn.classList.remove('bg-indigo-600');
+            btn.classList.add('bg-gray-300');
+            circulo.classList.remove('translate-x-7');
+            circulo.classList.add('translate-x-1'); // Vuelve a la izquierda
+        }
+    }
+
+    function toggleTemaGlobal() {
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('tema', 'claro');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('tema', 'oscuro');
+        }
+        aplicarEstadoTemaGlobal();
+    }
+
+    // Ejecutar animación cuando cargue el botón
+    document.addEventListener('DOMContentLoaded', aplicarEstadoTemaGlobal);
+</script>
