@@ -252,7 +252,8 @@ public class ProfesorController {
 
                 // Validar nulos
                 if (usuarioIdStr == null || materiaIdStr == null || cargo == null) {
-                    res.redirect("/vincularProfesores?errorMessage=Todos los campos son obligatorios.");
+                    String msg = URLEncoder.encode("Todos los campos son obligatorios.", StandardCharsets.UTF_8.toString());
+                    res.redirect("/vincularProfesores?errorMessage=" + msg);
                     return null;
                 }
 
@@ -263,7 +264,8 @@ public class ProfesorController {
                 Profesor profReal = Profesor.findFirst("usuario_id = ?", usuarioId);
 
                 if (profReal == null) {
-                    res.redirect("/vincularProfesores?errorMessage=Error interno: No se encontró el registro físico del profesor.");
+                    String msg = URLEncoder.encode("Error interno: No se encontró el registro físico del profesor.", StandardCharsets.UTF_8.toString());
+                    res.redirect("/vincularProfesores?errorMessage=" + msg);
                     return null;
                 }
 
@@ -275,7 +277,8 @@ public class ProfesorController {
                 vinculo.saveIt(); // Si ya está vinculado, ActiveJDBC tirará DBException (por la primary key compuesta)
 
                 // 4. Redirigir con éxito
-                res.redirect("/vincularProfesores?successMessage=Profesor vinculado a la materia exitosamente.");
+                String successMsg = URLEncoder.encode("Profesor vinculado a la materia exitosamente.", StandardCharsets.UTF_8.toString());
+                res.redirect("/vincularProfesores?successMessage=" + successMsg);
 
             } catch (org.javalite.activejdbc.DBException e) {
                 System.err.println("Error de BD: " + e.getMessage());
@@ -298,7 +301,16 @@ public class ProfesorController {
             Map<String, Object> model = new HashMap<>();
             Integer usuarioId = req.session().attribute("usuario_id");
             Usuario user = Usuario.findById(usuarioId);
-            model.put("usuario", user);
+            
+            // Transformamos el objeto de ActiveJDBC a un Mapa limpio para Mustache
+            Map<String, Object> usuarioData = new HashMap<>();
+            usuarioData.put("username", user.getString("username"));
+            usuarioData.put("name", user.getString("nombre")); 
+            usuarioData.put("apellido", user.getString("apellido"));
+            usuarioData.put("dni", user.getString("dni"));
+
+            model.put("usuario", usuarioData);
+
             String message = req.queryParams("message");
             String error = req.queryParams("error");
             if (message != null) model.put("message", message);
