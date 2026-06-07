@@ -4,9 +4,7 @@
 
 <div class="w-full tarjeta-moderna p-8 max-w-xl">
 
-    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
-        Mi Perfil
-    </h1>
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">Mi Perfil</h1>
 
     {{#message}}
         <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded mb-6">
@@ -38,11 +36,15 @@
             Cambiar Contraseña
         </h2>
 
-        <input type="password" name="actual" placeholder="Contraseña actual"
-               class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
 
-        <input type="password" name="nueva" placeholder="Nueva contraseña"
-               class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
+            <input type="password" name="actual" placeholder="Contraseña actual"
+                   class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
+
+
+
+            <input type="password" name="nueva" placeholder="Nueva contraseña"
+                   class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 p-2 rounded focus:ring-2 focus:ring-blue-400" required>
+
 
         <button type="submit"
                 class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors">

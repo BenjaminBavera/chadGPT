@@ -2,73 +2,71 @@
 
 <script>document.title = "Detalle de Materia";</script>
 
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl my-8">
+<div class="w-full tarjeta-moderna p-8 max-w-4xl">
 
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Detalle de Materia</h1>
-    <p class="text-center text-gray-500 mb-6">Materia: <span class="font-semibold">{{materia.nombre}}</span></p>
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">Detalle de Materia</h1>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Materia: <span class="font-semibold text-gray-800 dark:text-white">{{materia.nombre}}</span></p>
 
     {{#message}}
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">{{message}}</div>
+        <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded mb-6">{{message}}</div>
     {{/message}}
     {{#error}}
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">{{error}}</div>
+        <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6">{{error}}</div>
     {{/error}}
 
-    <!-- ACTUALIZAR CUPO -->
-    <div class="bg-gray-50 p-4 rounded-md border border-gray-200 mb-8">
-        <h2 class="text-lg font-semibold text-gray-800 mb-3">Modificar Cupo</h2>
-        <form action="/actualizarCupo" method="POST" class="flex gap-3 items-center">
+    <div class="bg-blue-50 dark:bg-slate-800/50 p-6 rounded-md border border-blue-200 dark:border-slate-700 mb-8">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b border-blue-200 dark:border-slate-600 pb-2">Modificar Cupo</h2>
+        <form action="/actualizarCupo" method="POST" class="flex gap-3 items-center mt-4">
             <input type="hidden" name="materia_id" value="{{materia.id}}">
             <input type="number" name="cupo" min="1" placeholder="Nuevo cupo"
-                   class="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   class="w-40 px-3 py-2 bg-white dark:bg-slate-900 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button type="submit"
-                    class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-semibold">
+                    class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors font-semibold">
                 Actualizar
             </button>
         </form>
     </div>
 
-    <!-- LISTA DE INSCRIPTOS -->
-    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Estudiantes Inscriptos</h2>
-    <div class="overflow-x-auto border border-gray-200 rounded-md mb-6">
-        <table class="w-full text-left bg-white">
+    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-slate-700 pb-2">Estudiantes Inscriptos</h2>
+    <div class="overflow-x-auto border border-gray-200 dark:border-slate-700 rounded-md mb-6">
+        <table class="w-full text-left bg-white dark:bg-slate-800">
             <thead>
-            <tr class="bg-gray-100 text-gray-700 text-sm">
-                <th class="p-3 border-b">Alumno</th>
-                <th class="p-3 border-b">DNI</th>
-                <th class="p-3 border-b text-center">Estado</th>
-                <th class="p-3 border-b text-center">Nota</th>
+            <tr class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 text-sm">
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Alumno</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">DNI</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600 text-center">Estado</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600 text-center">Nota</th>
             </tr>
             </thead>
-            <tbody class="text-sm">
+            <tbody class="text-sm text-gray-800 dark:text-gray-300">
             {{#estudiantes}}
-            <tr class="border-b hover:bg-gray-50">
-                <td class="p-3">{{nombre}} {{apellido}}</td>
-                <td class="p-3">{{dni}}</td>
-                <td class="p-3 text-center">
+                <tr class="hover:bg-blue-50 dark:hover:bg-slate-700/50 transition border-b border-gray-100 dark:border-slate-700">
+                    <td class="p-3">{{nombre}} {{apellido}}</td>
+                    <td class="p-3">{{dni}}</td>
+                    <td class="p-3 text-center">
                     <span class="px-2 py-1 rounded text-white text-xs font-semibold
                         {{#estado}}
-                        {{/estado}}
+                    {{/estado}}
                         bg-blue-500">
                         {{estado}}
                     </span>
-                </td>
-                <td class="p-3 text-center">{{nota}}</td>
-            </tr>
+                    </td>
+                    <td class="p-3 text-center">{{nota}}</td>
+                </tr>
             {{/estudiantes}}
             {{^estudiantes}}
-            <tr>
-                <td colspan="4" class="p-6 text-center text-gray-500 italic">
-                    No hay estudiantes inscriptos en esta materia.
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="4" class="p-6 text-center text-gray-500 dark:text-gray-400 italic">
+                        No hay estudiantes inscriptos en esta materia.
+                    </td>
+                </tr>
             {{/estudiantes}}
             </tbody>
         </table>
     </div>
 
     <button type="button" onclick="window.location.href='/dashboardAcademico'"
-            class="w-full bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400">
+            class="w-full bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md hover:bg-gray-400 dark:hover:bg-slate-600 transition-colors">
         Volver
     </button>
 

@@ -2,55 +2,47 @@
 
 <script>document.title = "Mi Estado Académico";</script>
 
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl my-8">
+<div class="w-full tarjeta-moderna p-8 max-w-4xl">
 
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
-        Mi Estado Académico
-    </h1>
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">Mi Estado Académico</h1>
 
     {{#message}}
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+    <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded mb-6">
         {{message}}
     </div>
     {{/message}}
 
     {{#error}}
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+    <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6">
         {{error}}
     </div>
     {{/error}}
 
     <!-- DATOS DEL ESTUDIANTE -->
-    <div class="bg-blue-50 p-6 rounded-md border border-blue-200 mb-8">
-        <h2 class="text-xl font-semibold text-blue-900 mb-4 border-b pb-2">
-            Mis Datos
-        </h2>
-
+    <div class="bg-blue-50 dark:bg-slate-800/50 p-6 rounded-md border border-blue-200 dark:border-slate-700 mb-8">
+        <h2 class="text-xl font-semibold text-blue-900 dark:text-blue-300 mb-4 border-b border-blue-200 dark:border-slate-600 pb-2">Mis Datos</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <p><b>Alumno:</b> {{usuario.nombre}} {{usuario.apellido}}</p>
-            <p><b>DNI:</b> {{usuario.dni}}</p>
+            <p><span class="font-semibold text-gray-700 dark:text-white">Alumno:</span> <span class="text-gray-800 dark:text-gray-300">{{usuario.nombre}} {{usuario.apellido}}</span></p>
+            <p><span class="font-semibold text-gray-700 dark:text-white">DNI:</span> <span class="text-gray-800 dark:text-gray-300">{{usuario.dni}}</span></p>
         </div>
     </div>
 
     <!-- TABLA -->
-    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-        Mis Materias
-    </h2>
-
-    <div class="overflow-x-auto border rounded-md">
-        <table class="w-full text-left bg-white">
+    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-slate-700 pb-2">Mis Materias</h2>
+    <div class="overflow-x-auto border dark:border-slate-700 rounded-md">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-gray-100 text-gray-700 text-sm">
-                    <th class="p-3 border-b">Código</th>
-                    <th class="p-3 border-b">Materia</th>
-                    <th class="p-3 border-b">Estado</th>
-                    <th class="p-3 border-b">Nota</th>
+                <tr class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 text-sm">
+                    <th class="p-3 border-b border-gray-300 dark:border-slate-600">Código</th>
+                    <th class="p-3 border-b border-gray-300 dark:border-slate-600">Materia</th>
+                    <th class="p-3 border-b border-gray-300 dark:border-slate-600">Estado</th>
+                    <th class="p-3 border-b border-gray-300 dark:border-slate-600">Nota</th>
                 </tr>
             </thead>
 
-            <tbody class="text-sm">
+            <tbody class="text-sm text-gray-800 dark:text-gray-300">
                 {{#materias}}
-                <tr class="hover:bg-gray-50 border-b">
+                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition border-b border-gray-100 dark:border-slate-700">
                     <td class="p-3 font-mono">{{materia_codigo}}</td>
                     <td class="p-3">{{nombre}}</td>
                     <td class="p-3">
@@ -58,7 +50,7 @@
                             {{estado}}
                         </span>
                     </td>
-                    <td class="p-3 text-center font-bold text-gray-700">{{notaDisplay}}</td>
+                    <td class="p-3 text-center font-bold text-gray-700 dark:text-gray-300">{{notaDisplay}}</td>
                 </tr>
                 {{/materias}}
 

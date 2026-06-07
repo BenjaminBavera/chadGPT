@@ -2,32 +2,32 @@
 
 <script>document.title = "Cargar Notas";</script>
 
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl my-8">
+<div class="w-full tarjeta-moderna p-8 max-w-4xl">
 
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Cargar Notas</h1>
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">Cargar Notas</h1>
     <p class="text-center text-gray-500 mb-6">Materia: <span class="font-semibold">{{materia.nombre}}</span></p>
 
     {{#message}}
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">{{message}}</div>
+    <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded mb-6">{{message}}</div>
     {{/message}}
     {{#error}}
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">{{error}}</div>
+    <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6">{{error}}</div>
     {{/error}}
 
-    <div class="overflow-x-auto border border-gray-200 rounded-md">
-        <table class="w-full text-left bg-white">
+    <div class="overflow-x-auto border border-gray-200 dark:border-slate-700 rounded-md">
+        <table class="w-full text-left border-collapse">
             <thead>
-            <tr class="bg-gray-100 text-gray-700 text-sm">
-                <th class="p-3 border-b">Alumno</th>
-                <th class="p-3 border-b">DNI</th>
-                <th class="p-3 border-b">Estado</th>
-                <th class="p-3 border-b">Nota</th>
-                <th class="p-3 border-b text-center">Accion</th>
+            <tr class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 text-sm">
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Alumno</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">DNI</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Estado</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600">Nota</th>
+                <th class="p-3 border-b border-gray-300 dark:border-slate-600 text-center">Accion</th>
             </tr>
             </thead>
-            <tbody class="text-sm">
+            <tbody class="text-sm text-gray-800 dark:text-gray-300">
             {{#estudiantes}}
-            <tr class="border-b hover:bg-gray-50">
+            <tr class="border-b hover:bg-gray-50 dark:hover:bg-slate-700/50 transition border-b border-gray-100 dark:border-slate-700">
                 <td class="p-3">{{nombre}} {{apellido}}</td>
                 <td class="p-3">{{dni}}</td>
                 <td class="p-3">{{estado}}</td>
@@ -37,7 +37,7 @@
                         <input type="hidden" name="estudiante_id" value="{{estudiante_id}}">
                         <input type="hidden" name="materia_id" value="{{materia_codigo}}">
                         <input type="number" name="nota" min="1" max="10" placeholder="1-10"
-                               class="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-20 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-300 dark:text-gray-700">
                         <button type="submit"
                                 class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">
                             Guardar

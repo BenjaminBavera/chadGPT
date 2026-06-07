@@ -2,21 +2,21 @@
 
 <script>document.title = "Reportes Académicos Institucionales";</script>
 
-<body class="bg-gray-50 min-h-screen p-8">
 
-<div class="max-w-7xl mx-auto">
+
+<div class="w-fuññ tarjeta-moderna p-8 max-4-7xl">
     
     <div class="mb-8 border-b pb-4 flex justify-between items-end">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Estadísticas Institucionales</h1>
-            <p class="text-gray-600 mt-2">Módulo de métricas cuantitativas y seguimiento global.</p>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 ">Estadísticas Institucionales</h1>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Módulo de métricas cuantitativas y seguimiento global.</p>
         </div>
         <a href="/dashboard" class="bg-indigo-600 text-white px-5 py-2 rounded shadow hover:bg-indigo-700 transition">
             Volver
         </a>
     </div>
 
-    <h2 class="text-xl font-bold text-gray-700 mb-4">Rendimiento por Carrera</h2>
+    <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-4">Rendimiento por Carrera</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {{#statsCarreras}}
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
@@ -35,7 +35,7 @@
         {{/statsCarreras}}
     </div>
 
-    <h2 class="text-xl font-bold text-gray-700 mb-4">Análisis Detallado por Materia</h2>
+    <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-4">Análisis Detallado por Materia</h2>
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -64,6 +64,4 @@
     </div>
 
 </div>
-
-</body>
 {{>footer}}

@@ -9,13 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/tailwind.css">
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
 
     <script>
         if (localStorage.getItem('tema') === 'oscuro') {
@@ -41,7 +36,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen transition-colors duration-300">
+<body class="flex flex-col min-h-screen">
 
 <nav class="bg-blue-700 dark:bg-slate-900 shadow-md sticky top-0 z-50 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +54,7 @@
                 <div class="flex items-center gap-2 bg-blue-800/50 dark:bg-slate-800 p-1.5 rounded-full border border-blue-600 dark:border-slate-700">
                     <span class="text-xs">☀️</span>
                     <button onclick="toggleTemaGlobal()" id="btn-tema-global" class="relative inline-flex items-center w-10 h-5 rounded-full transition-colors duration-300 focus:outline-none bg-blue-400 dark:bg-indigo-500">
-                        <span id="circulo-tema-global" class="inline-block w-3.5 h-3.5 bg-white rounded-full shadow transform transition-transform duration-300 translate-x-1"></span>
+                        <span id="circulo-tema-global" class="inline-block w-3.5 h-3.5 bg-white rounded-full shadow transform translate-x-1"></span>
                     </button>
                     <span class="text-xs">🌙</span>
                 </div>
@@ -99,7 +94,9 @@
         aplicarEstadoTemaGlobal();
     }
 
-    document.addEventListener('DOMContentLoaded', aplicarEstadoTemaGlobal);
+    window.addEventListener('load', () => {
+        aplicarEstadoTemaGlobal();
+    });
 </script>
 
 <main class="flex-1 flex flex-col items-center justify-center p-6 md:p-10 w-full max-w-6xl mx-auto">

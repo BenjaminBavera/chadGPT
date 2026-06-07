@@ -1,3 +1,5 @@
+npx @tailwindcss/cli -i ./src/main/resources/input.css -o ./src/main/resources/static/css/tailwind.css
+
 mvn clean process-classes
 
 mvn activejdbc-instrumentation:instrument

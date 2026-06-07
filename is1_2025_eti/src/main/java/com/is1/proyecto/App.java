@@ -31,6 +31,7 @@ import static spark.Spark.get;
 import static spark.Spark.halt;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.staticFiles;
 import spark.template.mustache.MustacheTemplateEngine;
 
 
@@ -51,6 +52,7 @@ public class App {
      */
     public static void main(String[] args) {
         port(8080); // Configura el puerto en el que la aplicación Spark escuchará las peticiones (por defecto es 4567).
+        staticFiles.location("/static");
 
         // Obtener la instancia única del singleton de configuración de la base de datos.
         DBConfigSingleton dbConfig = DBConfigSingleton.getInstance();
