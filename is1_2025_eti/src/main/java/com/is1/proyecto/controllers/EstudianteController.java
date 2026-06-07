@@ -40,12 +40,12 @@ public class EstudianteController {
         // A. Filtro Exclusivo para Administradores
         Filter filtroAdmin = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esAdmin = req.session().attribute("esAdmin");
 
             if (loggedIn == null || !loggedIn) {
                 res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
                 halt();
-            } else if (!"administrador".equals(rol)) {
+            } else if (esAdmin == null || !esAdmin) { // <-- Evaluamos el booleano
                 res.redirect("/login?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
                 halt();
             }
@@ -54,12 +54,12 @@ public class EstudianteController {
         // B. Filtro Exclusivo para Estudiantes
         Filter filtroEstudiante = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esEstudiante = req.session().attribute("esEstudiante");
 
             if (loggedIn == null || !loggedIn) {
                 res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
                 halt();
-            } else if (!"estudiante".equals(rol)) {
+            } else if (esEstudiante == null || !esEstudiante) {
                 res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Sección exclusiva para estudiantes.", StandardCharsets.UTF_8));
                 halt();
             }
@@ -132,38 +132,46 @@ public class EstudianteController {
             try {
                 Base.openTransaction();
 
-                // Verificaciones
-                if (Usuario.findFirst("username = ?", username) != null) {
-                    throw new Exception("El nombre de usuario ya está en uso.");
-                }
-                if (Usuario.findFirst("dni = ?", dni) != null) {
-                    throw new Exception("El DNI ya está registrado.");
+                // 1. Buscamos si la persona ya existe físicamente (por DNI)
+                Usuario user = Usuario.findFirst("dni = ?", dni);
+
+                if (user != null) {
+                    // La persona existe. Verificamos que no sea estudiante ya.
+                    if (Estudiante.findFirst("usuario_id = ?", user.getId()) != null) {
+                        throw new Exception("Esta persona ya está registrada como estudiante en el sistema.");
+                    }
+                    // Si llegó acá, existe pero no es estudiante (ej: es un profesor). 
+                    // Usamos su usuario existente, no hace falta validar username ni crear uno nuevo.
+                } else {
+                    // La persona NO existe. Validamos que el username elegido no esté en uso por otro.
+                    if (Usuario.findFirst("username = ?", username) != null) {
+                        throw new Exception("El nombre de usuario ya está en uso.");
+                    }
+
+                    // Creamos el Padre (Usuario) desde cero
+                    user = new Usuario();
+                    user.setUsername(username);
+                    user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+                    user.setName(nombre);
+                    user.setApellido(apellido);
+                    user.setDNI(Integer.parseInt(dni));
+                    user.setTelefono(telefono);
+                    user.setRol("estudiante"); // Rol base
+                    user.saveIt();
                 }
 
-                // 1. Crear Padre (Usuario)
-                Usuario user = new Usuario();
-                user.setUsername(username);
-                user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-                user.setName(nombre);
-                user.setApellido(apellido);
-                user.setDNI(Integer.parseInt(dni));
-                user.setTelefono(telefono);
-                user.setRol("estudiante");
-                user.saveIt();
-
-                // 2. Crear Hijo (Estudiante)
+                // 2. Crear Hijo (Estudiante) y vincularlo
                 Estudiante est = new Estudiante();
                 est.set("usuario_id", user.getId());
-                est.set("anioIngreso", LocalDate.now().getYear()); // Calculamos automático
-                est.set("nivel", "principiante"); // Por defecto según el CHECK de SQLite
+                est.set("anioIngreso", LocalDate.now().getYear()); 
+                est.set("nivel", "principiante"); 
                 est.saveIt();
 
                 Base.commitTransaction();
 
                 res.status(201);
                 String mensaje = "Estudiante " + nombre + " registrado exitosamente!";
-                String mensajeCodificado = URLEncoder.encode(mensaje, StandardCharsets.UTF_8.toString());
-                res.redirect("/registrarEstudiante?message=" + mensajeCodificado);
+                res.redirect("/registrarEstudiante?message=" + URLEncoder.encode(mensaje, StandardCharsets.UTF_8));
                 return "";
 
             } catch (Exception e) {

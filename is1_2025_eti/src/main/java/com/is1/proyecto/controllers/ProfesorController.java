@@ -37,13 +37,13 @@ public class ProfesorController {
         // A. Filtro Exclusivo para Administradores
         Filter filtroAdmin = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esAdmin = req.session().attribute("esAdmin");
 
             if (loggedIn == null || !loggedIn) {
                 res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
                 halt();
-            } else if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+            } else if (esAdmin == null || !esAdmin) { // <-- Evaluamos el booleano
+                res.redirect("/login?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
                 halt();
             }
         };
@@ -51,12 +51,12 @@ public class ProfesorController {
         // B. Filtro Exclusivo para Profesores
         Filter filtroProfesor = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esProfesor = req.session().attribute("esProfesor");
 
             if (loggedIn == null || !loggedIn) {
                 res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
                 halt();
-            } else if (!"profesor".equals(rol)) {
+            } else if (esProfesor == null || !esProfesor) {
                 res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Área exclusiva para profesores.", StandardCharsets.UTF_8));
                 halt();
             }
@@ -124,44 +124,48 @@ public class ProfesorController {
             }
 
             try {
-                // INICIAMOS TRANSACCIÓN
                 Base.openTransaction();
+                // 1. Buscamos si la persona ya existe físicamente (por DNI)
+                Usuario user = Usuario.findFirst("dni = ?", dni);
 
-                // 1. Verificar si el username, DNI o correo ya existen
-                if (Usuario.findFirst("username = ?", username) != null) {
-                    throw new Exception("El nombre de usuario ya está en uso.");
-                }
-                if (Usuario.findFirst("dni = ?", dni) != null) {
-                    throw new Exception("El DNI ya está registrado.");
-                }
-                if (Profesor.findFirst("correo = ?", correo) != null) {
-                    throw new Exception("El correo ya está registrado.");
-                }
+                if (user != null) {
+                    // La persona existe. Verificamos que no sea profesor ya.
+                    if (Profesor.findFirst("usuario_id = ?", user.getId()) != null) {
+                        throw new Exception("Esta persona ya está registrada como profesor en el sistema.");
+                    }
+                    // Validamos que el correo no lo esté usando otro profesor
+                    if (Profesor.findFirst("correo = ?", correo) != null) {
+                        throw new Exception("El correo ya está registrado en otro perfil de profesor.");
+                    }
+                } else {
+                    // La persona NO existe. Validamos credenciales únicas.
+                    if (Usuario.findFirst("username = ?", username) != null) {
+                        throw new Exception("El nombre de usuario ya está en uso.");
+                    }
+                    if (Profesor.findFirst("correo = ?", correo) != null) {
+                        throw new Exception("El correo ya está registrado.");
+                    }
 
-                // 2. Creamos la identidad padre (Usuario)
-                Usuario user = new Usuario();
-                user.setUsername(username);
-                user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt())); // Hasheado por seguridad
-                user.setName(nombre);
-                user.setApellido(apellido);
-                user.setDNI(Integer.parseInt(dni));
-                user.setTelefono(telefono); // Puede ser nulo
-                user.setRol("profesor"); // Asignamos el rol estrictamente
-                user.saveIt();
-
-                // 3. Creamos el hijo (Profesor) vinculándolo al ID del Usuario recién creado
+                    // Creamos el Padre (Usuario) desde cero
+                    user = new Usuario();
+                    user.setUsername(username);
+                    user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt())); 
+                    user.setName(nombre);
+                    user.setApellido(apellido);
+                    user.setDNI(Integer.parseInt(dni));
+                    user.setTelefono(telefono); 
+                    user.setRol("profesor"); // Rol base
+                    user.saveIt();
+                }
+                // 2. Creamos el hijo (Profesor) y lo vinculamos
                 Profesor pro = new Profesor();
-                pro.set("usuario_id", user.getId()); // ¡CLAVE FORÁNEA!
+                pro.set("usuario_id", user.getId()); 
                 pro.set("correo", correo);
                 pro.saveIt();
-
-                // CONFIRMAMOS TRANSACCIÓN
                 Base.commitTransaction();
-
                 res.status(201);
                 String mensaje = "Profesor " + nombre + " registrado exitosamente!";
-                String mensajeCodificado = URLEncoder.encode(mensaje, StandardCharsets.UTF_8.toString());
-                res.redirect("/registrarProfesor?message=" + mensajeCodificado);
+                res.redirect("/registrarProfesor?message=" + URLEncoder.encode(mensaje, StandardCharsets.UTF_8));
                 return "";
 
             } catch (Exception e) {

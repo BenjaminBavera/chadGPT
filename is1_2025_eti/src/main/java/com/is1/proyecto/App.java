@@ -21,6 +21,7 @@ import com.is1.proyecto.controllers.ProfesorController;
 import com.is1.proyecto.models.Estudiante;
 import com.is1.proyecto.models.EstudianteMateria;
 import com.is1.proyecto.models.Materia;
+import com.is1.proyecto.models.Profesor;
 import com.is1.proyecto.models.User;
 import com.is1.proyecto.models.Usuario;
 
@@ -91,35 +92,6 @@ public class App {
             }
         });
 
-        // -- Validacion de roles
-        before("/inscripcion", (req, res) -> {
-            String rol = req.session().attribute("rol");
-            if (!"estudiante".equals(rol)) {
-                halt(403, "Acceso denegado");
-            }
-        });
-
-        before("/estadoAcademico", (req, res) -> {
-            String rol = req.session().attribute("rol");
-            if (!"estudiante".equals(rol)) {
-                halt(403, "Acceso denegado");
-            }
-        });
-
-        before("/perfil", (req, res) -> {
-            String rol = req.session().attribute("rol");
-            if (!"estudiante".equals(rol)) {
-                halt(403, "Acceso denegado");
-            }
-        });
-
-        before("/inscribir", (req, res) -> {
-            String rol = req.session().attribute("rol");
-            if (!"estudiante".equals(rol)) {
-                halt(403, "Acceso denegado");
-            }
-        });
-
         // POST: Maneja el envío del formulario de inicio de sesión.
         post("/login", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -139,7 +111,7 @@ public class App {
                 model.put("errorMessage", "Usuario o contraseña incorrectos.");
                 return new ModelAndView(model, "login.mustache");
             }
-            // Usamos el getter que creaste en el paso anterior
+            // Usamos el getter que se creó en el paso anterior
             String storedHashedPassword = ac.getPassword();
             // Comparamos las contraseñas
             if (BCrypt.checkpw(plainTextPassword, storedHashedPassword)) {
@@ -148,27 +120,36 @@ public class App {
                 req.session(true).attribute("username", ac.getUsername());
                 req.session().attribute("usuario_id", ac.getId());
                 req.session().attribute("loggedIn", true);
-                // ¡LA CLAVE DE LA ARQUITECTURA NUEVA! Guardamos el rol en sesión
-                String rol = ac.getRol();
-                req.session().attribute("rol", rol);
-                System.out.println("DEBUG: Login exitoso para la cuenta: " + username + " | Rol: " + rol);
-                // --- 3. Redirección Basada en Roles (Patrón PRG) ---
-                // Dependiendo de quién se logueó, lo mandamos a su pantalla correspondiente
-                switch (rol) {
-                    case "administrador":
-                        res.redirect("/dashboard"); // Usamos la ruta que ya tenías armada
-                        break;
-                    case "profesor":
-                        res.redirect("/dashboardProfesor");
-                        break;
-                    case "estudiante":
-                        res.redirect("/dashboardEstudiante");
-                        break;
-                    default:
-                        // Si por algún motivo tiene un rol inválido en la DB
-                        res.redirect("/login?error=Rol de usuario no reconocido.");
+                // Evaluamos los roles yendo a buscar a la BD
+                boolean esAdmin = "administrador".equals(ac.getRol());
+                boolean esEstudiante = Estudiante.findFirst("usuario_id = ?", ac.getId()) != null;
+                boolean esProfesor = Profesor.findFirst("usuario_id = ?", ac.getId()) != null;
+                // Guardamos las banderas en la sesión
+                req.session().attribute("esAdmin", esAdmin);
+                req.session().attribute("esEstudiante", esEstudiante);
+                req.session().attribute("esProfesor", esProfesor);
+                System.out.println("DEBUG: Login exitoso para: " + username + " | Admin: " + esAdmin + " | Estudiante: " + esEstudiante + " | Profesor: " + esProfesor);
+                // --- 3. Redirección Basada en Múltiples Roles ---
+                if (esAdmin) {
+                    res.redirect("/dashboard");
+                    return null;
                 }
-                return null; // En Spark, después de un redirect SIEMPRE retornamos null
+                // Si es ambas cosas, va al semáforo (pantalla de selección)
+                if (esEstudiante && esProfesor) {
+                    res.redirect("/seleccionarPerfil");
+                    return null;
+                }
+                if (esEstudiante) {
+                    res.redirect("/dashboardEstudiante");
+                    return null;
+                }
+                if (esProfesor) {
+                    res.redirect("/dashboardProfesor");
+                    return null;
+                }
+                // Si no tiene ningún rol (caso raro, pero evita que el sistema explote)
+                res.redirect("/login?error=" + java.net.URLEncoder.encode("Tu cuenta no tiene roles asignados.", java.nio.charset.StandardCharsets.UTF_8.toString()));
+                return null;
             } else {
                 // Contraseña incorrecta.
                 res.status(401); // Unauthorized.
@@ -218,8 +199,13 @@ public class App {
             }
         });
 
-        registrarRutas();
+        get("/seleccionarPerfil", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("username", req.session().attribute("username"));
+            return new ModelAndView(model, "seleccionar_perfil.mustache");
+        }, new MustacheTemplateEngine());
 
+        registrarRutas();
 
     } // Fin del método main
 
