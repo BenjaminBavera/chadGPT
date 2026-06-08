@@ -28,17 +28,16 @@ public class PlanController {
 
     public static void registrarRutas(){
 
-        //Definición del filtro de seguridad.
         Filter filtroAdmin = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esAdmin = req.session().attribute("esAdmin");
 
             if (loggedIn == null || !loggedIn) {
                 res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
-                halt(); 
-            } else if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
-                halt(); 
+                halt();
+            } else if (esAdmin == null || !esAdmin) { // <-- Evaluamos el booleano
+                res.redirect("/login?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt();
             }
         };
 

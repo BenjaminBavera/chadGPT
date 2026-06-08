@@ -29,26 +29,25 @@ public class CarreraController {
 
     public static void registrarRutas(){
 
-        //Definición del filtro de seguridad.
-        Filter filtroAdminCarreras = (req, res) -> {
+       Filter filtroAdmin = (req, res) -> {
             Boolean loggedIn = req.session().attribute("loggedIn");
-            String rol = req.session().attribute("rol");
+            Boolean esAdmin = req.session().attribute("esAdmin");
 
             if (loggedIn == null || !loggedIn) {
-                res.redirect("/?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
-                halt(); 
-            } else if (!"administrador".equals(rol)) {
-                res.redirect("/dashboard?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
-                halt(); 
+                res.redirect("/login?error=" + URLEncoder.encode("Debes iniciar sesión primero.", StandardCharsets.UTF_8));
+                halt();
+            } else if (esAdmin == null || !esAdmin) { // <-- Evaluamos el booleano
+                res.redirect("/login?error=" + URLEncoder.encode("Acceso denegado. Solo administradores.", StandardCharsets.UTF_8));
+                halt();
             }
         };
 
         //Aplicación del filtro a las rutas.
-        before("/crearCarrera", filtroAdminCarreras);
-        before("/crearCarrera/new", filtroAdminCarreras);
-        before("/inscriptosPorMateria", filtroAdminCarreras);
-        before("/inscriptosPorMateria/*", filtroAdminCarreras); 
-        before("/actualizarCupo", filtroAdminCarreras);
+        before("/crearCarrera", filtroAdmin);
+        before("/crearCarrera/new", filtroAdmin);
+        before("/inscriptosPorMateria", filtroAdmin);
+        before("/inscriptosPorMateria/*", filtroAdmin); 
+        before("/actualizarCupo", filtroAdmin);
 
         get("/crearCarrera", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
