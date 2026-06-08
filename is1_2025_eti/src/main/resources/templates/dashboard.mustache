@@ -1,46 +1,79 @@
 {{> header}}
 
-        <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-6">Panel de Control</h1>
+<div class="w-full tarjeta-moderna p-8 max-w-5xl mx-auto">
 
-        {{#username}}
-        <p class="bienvenida text-xl text-center text-gray-700 mb-8">¡Bienvenido/a, <span class="font-semibold text-blue-600">{{username}}</span>!</p>
-        {{/username}}
-        {{^username}}
-        <p class="bienvenida text-xl text-center text-gray-700 mb-8">¡Bienvenido/a!</p>
-        {{/username}}
+    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-6">Panel de Control</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="card bg-blue-50 border border-blue-200 p-6 rounded-lg text-center shadow-sm">
-                <h2 class="text-2xl font-bold text-blue-700 mb-3">Tu Perfil</h2>
-                <p class="text-gray-600 mb-4">Gestiona la información de tu cuenta.</p>
-                <a href="/profile" class="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Perfil</a>
-            </div>
-            
-            <div class="card bg-yellow-50 border border-yellow-200 p-6 rounded-lg text-center shadow-sm">
-                <h2 class="text-2xl font-bold text-yellow-700 mb-3">Gestionar Usuarios</h2>
-                <p class="text-gray-600 mb-4">Crea administradores, profesores y estudiantes.</p>
-                <a href="/gestionUsuario" class="inline-block bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition duration-300">Registrar usuarios</a>
-            </div>
-            
-            <div class="card bg-green-50 border border-green-200 p-6 rounded-lg text-center shadow-sm">
-                <h2 class="text-2xl font-bold text-green-700 mb-3">Gestión Académica</h2>
-                <p class="text-gray-600 mb-4">Administra carreras, materias, cupos y vinculación docente.</p>
-                <a href="/dashboardAcademico" class="inline-block bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300">Administrar</a>
-            </div>
-            
-            <div class="card bg-teal-50 border border-teal-200 p-6 rounded-lg text-center shadow-sm">
-                <h2 class="text-2xl font-bold text-teal-700 mb-3">Reportes y Estadísticas</h2>
-                <p class="text-gray-600 mb-4">Accede a estadísticas globales, detección de alumnos en riesgo y listados de excelencia.</p>
-                <a href="/dashboardReportes" class="inline-block bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-300">Ver Reportes</a>
-            </div>
-            
-        </div>
+    {{#username}}
+        <p class="bienvenida text-xl text-center text-gray-700 dark:text-gray-300 mb-8">
+            ¡Bienvenido/a, <span class="font-semibold text-blue-600 dark:text-blue-400">{{username}}</span>!
+        </p>
+    {{/username}}
+    {{^username}}
+        <p class="bienvenida text-xl text-center text-gray-700 dark:text-gray-300 mb-8">
+            ¡Bienvenido/a!
+        </p>
+    {{/username}}
 
-        
-        <div class="w-full flex justify-center mt-6">
-            <a href="/logout" class="bg-red-600 text-white py-2 px-6 rounded-md hover:bg-red-700 transition duration-300 text-lg">
-                Cerrar Sesión
-            </a>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+        <a href="/profile" class="group relative flex flex-col justify-center items-center bg-blue-50 dark:bg-slate-800/80 border border-blue-200 dark:border-slate-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md hover:bg-blue-100 dark:hover:bg-slate-700 transition-all duration-300 min-h-[220px] overflow-hidden cursor-pointer">
+            <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-2 transform transition-transform duration-300 group-hover:-translate-y-2">Tu Perfil</h2>
+            <div class="relative w-full h-16 flex justify-center items-center">
+                <p class="absolute w-full text-gray-600 dark:text-gray-300 transition-all duration-300 opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-4">
+                    Gestiona la información de tu cuenta.
+                </p>
+                <p class="absolute w-full font-semibold text-blue-700 dark:text-blue-300 transition-all duration-300 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 px-4">Gestioná tus datos y contraseña.</p>
+            </div>
+        </a>
+
+        <a href="/gestionUsuario" class="group relative flex flex-col justify-center items-center bg-yellow-50 dark:bg-slate-800/80 border border-yellow-200 dark:border-slate-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md hover:bg-yellow-100 dark:hover:bg-slate-700 transition-all duration-300 min-h-[220px] overflow-hidden cursor-pointer">
+            <h2 class="text-2xl font-bold text-yellow-700 dark:text-yellow-400 mb-2 transform transition-transform duration-300 group-hover:-translate-y-2">Gestionar Usuarios</h2>
+
+            <div class="relative w-full h-16 flex justify-center items-center">
+                <p class="absolute w-full text-gray-600 dark:text-gray-300 transition-all duration-300 opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-4">
+                    Crea administradores, profesores y estudiantes.
+                </p>
+                <p class="absolute w-full font-semibold text-yellow-700 dark:text-yellow-400 transition-all duration-300 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 px-4">
+                    Registrar usuarios
+                </p>
+            </div>
+        </a>
+
+        <a href="/dashboardAcademico" class="group relative flex flex-col justify-center items-center bg-green-50 dark:bg-slate-800/80 border border-green-200 dark:border-slate-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md hover:bg-green-100 dark:hover:bg-slate-700 transition-all duration-300 min-h-[220px] overflow-hidden cursor-pointer">
+            <h2 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-2 transform transition-transform duration-300 group-hover:-translate-y-2">Gestión Académica</h2>
+
+            <div class="relative w-full h-16 flex justify-center items-center">
+                <p class="absolute w-full text-gray-600 dark:text-gray-300 transition-all duration-300 opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-4">
+                    Administra carreras, materias, cupos y vinculación docente.
+                </p>
+                <p class="absolute w-full font-semibold text-green-700 dark:text-green-400 transition-all duration-300 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 px-4">
+                    Administrar
+                </p>
+            </div>
+        </a>
+
+        <a href="/dashboardReportes" class="group relative flex flex-col justify-center items-center bg-teal-50 dark:bg-slate-800/80 border border-teal-200 dark:border-slate-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md hover:bg-teal-100 dark:hover:bg-slate-700 transition-all duration-300 min-h-[220px] overflow-hidden cursor-pointer">
+            <h2 class="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2 transform transition-transform duration-300 group-hover:-translate-y-2">Reportes y Estadísticas</h2>
+
+            <div class="relative w-full h-16 flex justify-center items-center">
+                <p class="absolute w-full text-gray-600 dark:text-gray-300 transition-all duration-300 opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-4">
+                    Accede a estadísticas globales, detección de alumnos en riesgo y listados de excelencia.
+                </p>
+                <p class="absolute w-full font-semibold text-teal-700 dark:text-teal-400 transition-all duration-300 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 px-4">
+                    Ver Reportes
+                </p>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="w-full flex justify-center mt-6">
+        <a href="/logout" class="bg-red-600 dark:bg-red-700 text-white py-2 px-6 rounded-md hover:bg-red-700 dark:hover:bg-red-600 transition duration-300 text-lg font-medium">
+            Cerrar Sesión
+        </a>
+    </div>
+
+</div>
 
 {{> footer}}
